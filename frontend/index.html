@@ -1,0 +1,11 @@
+<!doctype html><html><head><meta charset='utf-8'><title>Secure AI Insights</title><script src='https://cdn.jsdelivr.net/npm/chart.js'></script><style>body{font-family:Arial;margin:20px}#chat{border:1px solid #ccc;padding:12px;height:220px;overflow:auto} .row{display:flex;gap:10px} pre{background:#f7f7f7;padding:8px}</style></head><body>
+<h2>Secure AI Insights Assistant</h2>
+<div class='row'><input id='q' style='width:70%' placeholder='Ask a business question'/><select id='year'><option>2025</option><option>2024</option></select><button onclick='ask()'>Ask</button></div>
+<div id='chat'></div>
+<h3>Tool Trace</h3><pre id='trace'></pre>
+<h3>Top Titles (2025)</h3><canvas id='chart' width='600' height='220'></canvas>
+<script>
+async function ask(){const query=q.value;const year=document.getElementById('year').value;const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query,filters:{year}})});const data=await r.json();chat.innerHTML+=`<p><b>You:</b> ${query}</p><p><b>Assistant:</b> ${data.answer}</p><p><i>Sources: ${data.sources.map(s=>s.tool+':'+s.source).join(', ')}</i></p>`;trace.textContent=JSON.stringify(data.trace,null,2)}
+async function dash(){const r=await fetch('/api/dashboard');const d=await r.json();new Chart(document.getElementById('chart'),{type:'bar',data:{labels:d.top_titles.map(x=>x.title),datasets:[{label:'Watch Minutes',data:d.top_titles.map(x=>x.total_minutes)}]}})}
+dash();
+</script></body></html>

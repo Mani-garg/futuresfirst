@@ -20,6 +20,7 @@
       --border: #e2e8f0;
       --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.08);
       --shadow-hover: 0 18px 40px rgba(15, 23, 42, 0.12);
+      --grid-line: rgba(148, 163, 184, 0.28);
       --radius-lg: 20px;
       --radius-md: 16px;
       --radius-sm: 12px;
@@ -170,15 +171,25 @@
     .content-grid { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(300px, 1fr); gap: 16px; }
     .left-col, .right-col { display: grid; gap: 16px; }
 
-    .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .charts-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
     .chart-wrap {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
       box-shadow: var(--shadow-soft);
-      padding: 14px;
+      padding: 16px;
+      display: grid;
+      gap: 10px;
+      min-height: 310px;
     }
-    .chart-wrap h3 { margin: 4px 0 10px; font-size: 15px; }
+    .chart-wrap h3 { margin: 0; font-size: 15px; }
+    .chart-head { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
+    .chart-subtitle { margin: 2px 0 0; font-size: 12px; color: var(--muted); }
+    .chart-pill { font-size: 11px; color:#1e40af; background:#dbeafe; border:1px solid #bfdbfe; border-radius: 999px; padding: 4px 8px; font-weight: 600; }
+    .chart-canvas-wrap { position: relative; height: 230px; }
+    .chart-wrap.span-6 { grid-column: span 6; }
+    .chart-wrap.span-8 { grid-column: span 8; }
+    .chart-wrap.span-4 { grid-column: span 4; }
 
     table { width: 100%; border-collapse: collapse; font-size: 14px; }
     th, td { text-align: left; padding: 9px 6px; border-bottom: 1px solid var(--border); }
@@ -230,6 +241,7 @@
       .app { grid-template-columns: 1fr; }
       .sidebar { display: none; }
       .content-grid, .charts-grid { grid-template-columns: 1fr; }
+      .chart-wrap.span-6, .chart-wrap.span-8, .chart-wrap.span-4 { grid-column: auto; min-height: 280px; }
       .main { padding: 16px; }
     }
   </style>
@@ -284,20 +296,44 @@
           </div>
 
           <div class='charts-grid'>
-            <div class='chart-wrap'>
-              <h3>Top Titles by Watch Minutes</h3>
-              <canvas id='chartTitles' height='200'></canvas>
+            <div class='chart-wrap span-8'>
+              <div class='chart-head'>
+                <div>
+                  <h3>Top Titles by Watch Minutes</h3>
+                  <p class='chart-subtitle'>Distribution across top-performing content.</p>
+                </div>
+                <span class='chart-pill'>Weekly</span>
+              </div>
+              <div class='chart-canvas-wrap'><canvas id='chartTitles'></canvas></div>
             </div>
-            <div class='chart-wrap'>
-              <h3>City Engagement Mix</h3>
-              <canvas id='chartCities' height='200'></canvas>
+            <div class='chart-wrap span-4'>
+              <div class='chart-head'>
+                <div>
+                  <h3>City Engagement Mix</h3>
+                  <p class='chart-subtitle'>Share of watch minutes by market.</p>
+                </div>
+                <span class='chart-pill'>30 Days</span>
+              </div>
+              <div class='chart-canvas-wrap'><canvas id='chartCities'></canvas></div>
             </div>
-            <div class='chart-wrap'>
-              <h3>Title Ratings Overview</h3>
-              <canvas id='chartRatings' height='170'></canvas>
+            <div class='chart-wrap span-6'>
+              <div class='chart-head'>
+                <div>
+                  <h3>Title Ratings Overview</h3>
+                  <p class='chart-subtitle'>Trendline with portfolio-quality baseline.</p>
+                </div>
+                <span class='chart-pill'>QoQ</span>
+              </div>
+              <div class='chart-canvas-wrap'><canvas id='chartRatings'></canvas></div>
             </div>
-            <div class='chart-wrap'>
-              <h3>Detailed Top Titles Table</h3>
+            <div class='chart-wrap span-6'>
+              <div class='chart-head'>
+                <div>
+                  <h3>Detailed Top Titles Table</h3>
+                  <p class='chart-subtitle'>Sortable table-ready data for leadership reviews.</p>
+                </div>
+                <span class='chart-pill'>Top 5</span>
+              </div>
               <table>
                 <thead><tr><th>Title</th><th>Watch Minutes</th><th>Avg Rating</th></tr></thead>
                 <tbody id='titleTable'></tbody>
@@ -401,6 +437,20 @@ function upsertChart(instance, canvasId, config){
   if(instance) instance.destroy();
   return new Chart(document.getElementById(canvasId), config);
 }
+const chartTypography = {
+  family: "'Inter', 'Segoe UI', Roboto, Arial, sans-serif",
+  size: 12
+};
+const chartTooltip = {
+  backgroundColor: 'rgba(15,23,42,0.94)',
+  titleColor: '#f8fafc',
+  bodyColor: '#e2e8f0',
+  borderColor: 'rgba(148,163,184,0.35)',
+  borderWidth: 1,
+  cornerRadius: 10,
+  padding: 10,
+  displayColors: true
+};
 
 function buildInsights(titles, cities){
   const topTitle = titles[0];
@@ -507,19 +557,67 @@ async function dash(){
 
   titleChart = upsertChart(titleChart, 'chartTitles', {
     type:'bar',
-    data:{labels:titles.map(x=>x.title),datasets:[{label:'Watch Minutes',data:titles.map(x=>x.total_minutes),backgroundColor:'#60a5fa',borderRadius:8}]},
-    options:{plugins:{legend:{display:true}},scales:{y:{beginAtZero:true}}}
+    data:{labels:titles.map(x=>x.title),datasets:[{label:'Watch Minutes',data:titles.map(x=>x.total_minutes),backgroundColor:'#3b82f6',hoverBackgroundColor:'#1d4ed8',borderRadius:10,barThickness:24,maxBarThickness:28}]},
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false, labels:{font: chartTypography}},
+        tooltip: {
+          ...chartTooltip,
+          callbacks:{label:(ctx)=>` ${ctx.dataset.label}: ${fmt(ctx.parsed.y)} min`}
+        }
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#475569',font:chartTypography,maxRotation:0,minRotation:0}},
+        y:{beginAtZero:true,grid:{color:'rgba(148, 163, 184, 0.25)'},ticks:{color:'#475569',font:chartTypography,callback:(v)=>fmt(v)}}
+      }
+    }
   });
 
   cityChart = upsertChart(cityChart, 'chartCities', {
     type:'doughnut',
-    data:{labels:cities.map(x=>x.city),datasets:[{label:'City Minutes',data:cities.map(x=>x.total_minutes),backgroundColor:['#2563eb','#0891b2','#7c3aed','#0ea5e9','#f59e0b','#16a34a','#ef4444','#64748b','#e11d48','#84cc16']} ]}
+    data:{labels:cities.map(x=>x.city),datasets:[{label:'City Minutes',data:cities.map(x=>x.total_minutes),hoverOffset:10,borderWidth:2,borderColor:'#fff',backgroundColor:['#2563eb','#0891b2','#7c3aed','#0ea5e9','#f59e0b','#16a34a','#ef4444','#64748b','#e11d48','#84cc16']} ]},
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      cutout:'62%',
+      plugins:{
+        legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:8,padding:14,color:'#334155',font:chartTypography}},
+        tooltip:{
+          ...chartTooltip,
+          callbacks:{
+            label:(ctx)=>{
+              const total = ctx.dataset.data.reduce((a,b)=>a + b,0) || 1;
+              const pct = ((ctx.parsed/total)*100).toFixed(1);
+              return ` ${ctx.label}: ${fmt(ctx.parsed)} min (${pct}%)`;
+            }
+          }
+        }
+      }
+    }
   });
 
   ratingChart = upsertChart(ratingChart, 'chartRatings', {
     type:'line',
-    data:{labels:titles.map(x=>x.title),datasets:[{label:'Average Rating',data:titles.map(x=>Number(x.avg_rating||0).toFixed(2)),borderColor:'#1d4ed8',backgroundColor:'#bfdbfe',tension:.35,fill:true}]},
-    options:{scales:{y:{beginAtZero:true,suggestedMax:5}}}
+    data:{labels:titles.map(x=>x.title),datasets:[{label:'Average Rating',data:titles.map(x=>Number(x.avg_rating||0).toFixed(2)),borderColor:'#1d4ed8',pointBackgroundColor:'#1d4ed8',pointHoverRadius:6,pointRadius:4,backgroundColor:'rgba(59,130,246,0.18)',tension:.35,fill:true}]},
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      interaction:{mode:'nearest',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          ...chartTooltip,
+          callbacks:{label:(ctx)=>` Rating: ${Number(ctx.parsed.y).toFixed(2)} / 5`}
+        }
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#475569',font:chartTypography}},
+        y:{beginAtZero:true,suggestedMax:5,grid:{color:'rgba(148, 163, 184, 0.25)'},ticks:{stepSize:1,color:'#475569',font:chartTypography}}
+      }
+    }
   });
 }
 

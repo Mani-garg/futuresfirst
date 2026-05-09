@@ -36,26 +36,8 @@
       min-height: 100vh;
     }
 
-    .app { display: grid; grid-template-columns: 264px 1fr; min-height: 100vh; }
+    .app { min-height: 100vh; }
 
-    .sidebar {
-      background: var(--sidebar-bg);
-      color: #e2e8f0;
-      padding: 28px 16px;
-      border-right: 1px solid #1e293b;
-    }
-    .brand { font-size: 15px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 24px; }
-    .nav-item {
-      display: block;
-      font-size: 13px;
-      color: var(--sidebar-muted);
-      padding: 10px 12px;
-      border-radius: var(--radius-sm);
-      margin-bottom: 6px;
-      font-weight: 600;
-      transition: .15s ease;
-    }
-    .nav-item.active, .nav-item:hover { color: #fff; background: rgba(59,130,246,.16); }
 
     .main { padding: var(--layout); display: grid; gap: 18px; }
     .topbar {
@@ -161,8 +143,6 @@
     .list li { border-bottom: 1px solid var(--border); padding: 10px 0; font-size: 13px; color: #334155; }
 
     @media (max-width: 1160px) {
-      .app { grid-template-columns: 1fr; }
-      .sidebar { display: none; }
       .content-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 980px) {
@@ -176,16 +156,6 @@
 </head>
 <body>
   <div class='app'>
-    <aside class='sidebar'>
-      <div class='brand'>Secure AI Insights</div>
-      <span class='nav-item active'>Overview</span>
-      <span class='nav-item'>Assistant</span>
-      <span class='nav-item'>Tool Trace</span>
-      <span class='nav-item'>Analytics</span>
-      <span class='nav-item'>Insights</span>
-      <span class='nav-item'>History</span>
-    </aside>
-
     <main class='main'>
       <div class='topbar'>
         <div>

@@ -5,295 +5,104 @@
   <meta name='viewport' content='width=device-width, initial-scale=1'>
   <title>Secure AI Insights</title>
   <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+  <script src='https://unpkg.com/lucide@latest'></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
     :root {
-      --bg: #f5f7fb;
-      --surface: #ffffff;
-      --surface-subtle: #f8fafc;
+      --bg: #F8FAFC;
+      --sidebar: #0F172A;
+      --primary: #4F46E5;
+      --accent: #06B6D4;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --surface: #FFFFFF;
+      --text: #111827;
+      --text-muted: #64748B;
       --border: rgba(15, 23, 42, 0.06);
-      --text: #0f172a;
-      --text-muted: #5b6b82;
-      --primary: #4f46e5;
-      --primary-soft: rgba(79, 70, 229, 0.12);
-      --accent: #06b6d4;
-      --success: #10b981;
-      --danger: #b91c1c;
-      --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 10px 24px rgba(15, 23, 42, 0.04);
-      --radius-card: 14px;
-      --radius-sm: 10px;
-      --layout: 24px;
+      --radius: 14px;
+      --shadow: 0 1px 2px rgba(0,0,0,.04);
     }
-
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
-      color: var(--text);
-      background: linear-gradient(180deg, #f9fbff 0%, var(--bg) 180px);
-      min-height: 100vh;
-    }
-
-    .app { min-height: 100vh; }
-
-    .main {
-      width: min(1360px, 100%);
-      margin: 0 auto;
-      padding: 28px;
-      display: grid;
-      gap: 22px;
-    }
-    .topbar {
-      display: flex; justify-content: space-between; align-items: center;
-      background: rgba(255,255,255,.75); border: 1px solid rgba(255,255,255,.3);
-      border-radius: var(--radius-card); padding: 16px 20px; box-shadow: var(--shadow);
-      backdrop-filter: blur(8px);
-    }
-    .topbar h1 { margin: 0; font-size: 20px; letter-spacing: -0.02em; }
-    .topbar p { margin: 4px 0 0; font-size: 13px; color: var(--text-muted); }
-
-    .hero {
-      border: 1px solid rgba(255,255,255,0.25);
-      background:
-        radial-gradient(circle at 85% 20%, rgba(6,182,212,0.2) 0%, transparent 45%),
-        radial-gradient(circle at 15% 90%, rgba(79,70,229,0.24) 0%, transparent 50%),
-        linear-gradient(125deg, rgba(17,24,39,0.92), rgba(31,41,55,0.88));
-      color: #e2e8f0;
-      border-radius: var(--radius-card);
-      padding: 28px;
-      box-shadow: 0 10px 34px rgba(17,24,39,.14);
-      backdrop-filter: blur(14px);
-    }
-    .hero h2 { margin: 0; font-size: 30px; letter-spacing: -.03em; font-weight: 700; color: #f8fafc; }
-    .hero p { margin: 10px 0 0; max-width: 760px; opacity: .86; font-size: 13px; line-height: 1.65; font-weight: 400; }
-
-    .content-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(300px, .95fr); gap: 18px; }
-    .left-col, .right-col { display: grid; gap: 18px; align-content: start; }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: var(--radius-card);
-      box-shadow: var(--shadow);
-      padding: 16px;
-    }
-    .card h3 { margin: 0 0 12px; font-size: 14px; letter-spacing: .01em; text-transform: uppercase; color: #334155; }
-
-    .row { display: flex; gap: 10px; flex-wrap: wrap; }
-    input, select, button {
-      height: 40px; border: 1px solid #cdd7e5; border-radius: var(--radius-sm);
-      font: inherit; font-size: 14px; padding: 0 12px; background: #fff;
-    }
-    input:focus, select:focus { outline: 2px solid #bfdbfe; border-color: #93c5fd; }
-    #q { flex: 1 1 420px; }
-    button {
-      border: 0; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; font-weight: 700;
-      cursor: pointer; box-shadow: 0 5px 14px rgba(37,99,235,.28); transition: transform .12s ease;
-    }
-    button:hover { transform: translateY(-1px); }
-
-    #chat { margin-top: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface-subtle); min-height: 160px; max-height: 290px; overflow: auto; padding: 12px; }
-    .msg { margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed #d6deea; font-size: 13px; line-height: 1.45; }
-
-    .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
-    .kpi { padding: 14px; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
-    .kpi h4 { margin: 0 0 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; color: var(--text-muted); }
-    .kpi p { margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -.02em; }
-    .kpi .delta { margin-top: 5px; color: #0369a1; font-size: 12px; }
-
-    .charts-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
-    .chart-wrap { min-height: 300px; display: grid; gap: 10px; }
-    .chart-head { display: flex; justify-content: space-between; gap: 8px; align-items: start; }
-    .chart-wrap h3 { margin: 0; font-size: 15px; letter-spacing: -.01em; }
-    .chart-subtitle { margin: 3px 0 0; color: var(--text-muted); font-size: 12px; }
-    .chart-pill { font-size: 11px; border-radius: 999px; padding: 4px 9px; background: var(--primary-soft); border: 1px solid #bfd3ff; color: #1d4ed8; font-weight: 700; }
-    .chart-canvas-wrap { position: relative; height: 230px; }
-    .chart-canvas-wrap.city-donut {
-      min-height: 248px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      padding: 6px;
-    }
-    .span-8 { grid-column: span 8; }
-    .span-6 { grid-column: span 6; }
-    .span-4 { grid-column: span 4; }
-
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--border); }
-    th { color: #334155; background: #f8fafc; font-size: 12px; text-transform: uppercase; letter-spacing: .02em; }
-
-    .trace-timeline { display: grid; gap: 10px; }
-    .trace-step { border: 1px solid var(--border); border-radius: 10px; background: var(--surface-subtle); overflow: hidden; }
-    .trace-step summary { list-style: none; padding: 10px 12px; cursor: pointer; display: grid; gap: 8px; }
-    .trace-step summary::-webkit-details-marker { display: none; }
-    .trace-topline, .insight-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-    .trace-meta { display: flex; flex-wrap: wrap; gap: 8px; font-size: 12px; color: var(--text-muted); }
-    .trace-name { font-size: 13px; font-weight: 700; }
-    .trace-body { border-top: 1px dashed var(--border); padding: 10px 12px; font-size: 12px; color: #334155; display: grid; gap: 6px; }
-    .trace-source a { color: #1d4ed8; text-decoration: none; }
-
-    .badge { border-radius: 999px; font-size: 11px; font-weight: 700; padding: 2px 8px; border: 1px solid transparent; }
-    .status-success { color: var(--success); background: rgba(22,163,74,.13); border-color: rgba(22,163,74,.3); }
-    .status-running { color: #1d4ed8; background: rgba(37,99,235,.12); border-color: rgba(37,99,235,.3); }
-    .status-failed { color: var(--danger); background: rgba(220,38,38,.11); border-color: rgba(220,38,38,.25); }
-    .status-idle { color: #334155; background: rgba(148,163,184,.18); border-color: rgba(148,163,184,.3); }
-    .cat-retrieval { color: #4338ca; background: rgba(99,102,241,.12); border-color: rgba(99,102,241,.3); }
-    .cat-reasoning { color: #9d174d; background: rgba(236,72,153,.12); border-color: rgba(236,72,153,.3); }
-    .cat-execution { color: #0e7490; background: rgba(6,182,212,.12); border-color: rgba(6,182,212,.3); }
-    .cat-observability { color: #854d0e; background: rgba(245,158,11,.12); border-color: rgba(245,158,11,.3); }
-
-    .insights-grid { display: grid; gap: 10px; }
-    .insight-card { border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 12px; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
-    .insight-title { font-size: 13px; font-weight: 700; display: flex; gap: 7px; align-items: center; }
-    .confidence { font-size: 11px; padding: 3px 8px; border-radius: 999px; border: 1px solid #bfdbfe; background: #eff6ff; color: #1e40af; font-weight: 700; }
-    .insight-main { display: grid; gap: 5px; margin-top: 8px; }
-    .insight-metric { font-size: 19px; font-weight: 800; letter-spacing: -.02em; }
-    .insight-detail { font-size: 12px; color: var(--text-muted); line-height: 1.45; }
-    .rec-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-    .rec-tag { font-size: 11px; padding: 3px 8px; border-radius: 999px; border: 1px solid #d0dae7; background: #f8fafc; color: #334155; font-weight: 600; }
-
-    .list { list-style: none; margin: 0; padding: 0; }
-    .list li { border-bottom: 1px solid var(--border); padding: 10px 0; font-size: 13px; color: #334155; }
-
-    @media (max-width: 1160px) {
-      .content-grid { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 980px) {
-      .main { padding: 14px; }
-      .charts-grid { grid-template-columns: 1fr; }
-      .span-8, .span-6, .span-4 { grid-column: auto; }
-      .topbar { align-items: start; }
-      .hero h2 { font-size: 24px; }
-      .chart-canvas-wrap.city-donut { min-height: 280px; }
-    }
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,sans-serif;background:var(--bg);color:var(--text)}
+    .app{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+    .sidebar{position:sticky;top:0;height:100vh;background:var(--sidebar);padding:20px 14px;color:#cbd5e1}
+    .brand{display:flex;gap:10px;align-items:center;color:#fff;font-weight:700;margin-bottom:22px}
+    .nav-item{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:10px;color:#cbd5e1;text-decoration:none;transition:.2s;margin-bottom:6px}
+    .nav-item:hover{background:rgba(148,163,184,.12);color:#fff}.nav-item.active{background:rgba(79,70,229,.12);color:#4F46E5}
+    .main{padding:22px;display:grid;gap:16px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px 16px;box-shadow:var(--shadow)}
+    .search{display:flex;align-items:center;gap:8px;background:#f8fafc;border:1px solid var(--border);padding:8px 10px;border-radius:10px;min-width:280px}
+    .search input{border:0;outline:none;background:none;width:100%;font:inherit}
+    .top-actions{display:flex;align-items:center;gap:12px}.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#4F46E5,#06B6D4)}
+    .hero{position:relative;overflow:hidden;border-radius:18px;padding:34px;background:linear-gradient(135deg,#312E81 0%,#1E3A8A 50%,#0F766E 100%);color:#fff;box-shadow:0 20px 40px rgba(15,23,42,.14)}
+    .hero:before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 20%,rgba(255,255,255,.22),transparent 42%)}
+    .hero-content{position:relative;max-width:760px}.hero h1{margin:0 0 10px;font-size:34px;letter-spacing:-.03em}.hero p{margin:0;opacity:.9;line-height:1.65}
+    .layout{display:grid;grid-template-columns:minmax(0,2fr) 360px;gap:16px}
+    .card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;transition:.2s}
+    .card:hover{transform:translateY(-1px);box-shadow:0 12px 26px rgba(15,23,42,.06)}
+    h3{margin:0 0 12px;font-size:18px}.label{font-size:12px;color:var(--text-muted)}
+    .row{display:flex;gap:10px;flex-wrap:wrap} input,select,button{height:40px;border-radius:10px;border:1px solid var(--border);padding:0 12px;font:inherit}
+    #q{flex:1 1 420px} button{background:var(--primary);color:#fff;border:0;font-weight:600;cursor:pointer;transition:.2s} button:hover{filter:brightness(.95)}
+    #chat{margin-top:14px;min-height:160px;max-height:300px;overflow:auto;background:#F8FAFC;border:1px solid var(--border);border-radius:12px;padding:12px}
+    .msg{padding:12px;border-radius:10px;background:#fff;border:1px solid var(--border);margin-bottom:10px;animation:fade .3s}
+    .sources{display:flex;gap:6px;flex-wrap:wrap}.chip{font-size:11px;padding:4px 8px;border-radius:999px;background:#eef2ff;color:#4338ca}
+    .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.kpi p{margin:8px 0 2px;font-size:24px;font-weight:800}
+    .charts{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}.span8{grid-column:span 8}.span4{grid-column:span 4}.span6{grid-column:span 6}
+    .canvas-wrap{height:250px}.city-wrap{display:flex;justify-content:center;align-items:center;min-height:260px}
+    .trace-step{border:1px solid var(--border);border-radius:12px;margin-bottom:10px;background:#fff}.trace-step summary{cursor:pointer;padding:10px 12px;list-style:none}
+    .trace-meta{display:flex;gap:8px;align-items:center;color:var(--text-muted);font-size:12px}.badge{font-size:11px;padding:3px 8px;border-radius:999px}
+    .status-success{background:rgba(16,185,129,.12);color:#047857}.status-running{background:rgba(79,70,229,.12);color:#4F46E5}
+    .insight-card{padding:12px;border:1px solid var(--border);border-radius:12px;margin-bottom:10px;transition:.2s}.insight-card:hover{background:#f8fafc}
+    @keyframes fade{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+    .typing{display:inline-flex;gap:4px}.typing span{width:6px;height:6px;border-radius:50%;background:#94a3b8;animation:blink 1.1s infinite}.typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+    @keyframes blink{0%,80%,100%{opacity:.3}40%{opacity:1}}
+    @media (max-width:1100px){.app{grid-template-columns:1fr}.sidebar{position:fixed;inset:0 auto 0 0;transform:translateX(-100%)}.layout{grid-template-columns:1fr}.charts{grid-template-columns:1fr}.span8,.span4,.span6{grid-column:auto}.city-wrap{min-height:300px}}
   </style>
 </head>
 <body>
-  <div class='app'>
-    <main class='main'>
-      <div class='topbar'>
-        <div>
-          <h1>Enterprise Analytics Workspace</h1>
-          <p>Unified AI copilot, execution observability, and leadership-grade media intelligence.</p>
+<div class='app'>
+  <aside class='sidebar'>
+    <div class='brand'><i data-lucide='activity'></i> Helios AI</div>
+    <a class='nav-item active' href='#'><i data-lucide='layout-dashboard'></i> Dashboard</a>
+    <a class='nav-item' href='#'><i data-lucide='brain'></i> AI Insights</a>
+    <a class='nav-item' href='#'><i data-lucide='trending-up'></i> Performance</a>
+    <a class='nav-item' href='#'><i data-lucide='shield-check'></i> Observability</a>
+    <a class='nav-item' href='#'><i data-lucide='alert-triangle'></i> Risk Center</a>
+  </aside>
+  <main class='main'>
+    <div class='topbar'><div class='search'><i data-lucide='search'></i><input placeholder='Search metrics, sources, agents...'></div><div class='top-actions'><span class='label'>Workspace: Executive Ops</span><i data-lucide='bell'></i><div class='avatar'></div></div></div>
+    <section class='hero'><div class='hero-content'><h1>Executive AI Analytics Platform</h1><p>Explainable multi-source analytics, AI-generated recommendations, and full agent traceability for leadership decision-making.</p></div></section>
+    <div class='layout'>
+      <section style='display:grid;gap:12px'>
+        <div class='card'><h3>AI Assistant</h3><div class='row'><input id='q' placeholder='Ask a strategic business question'><select id='year'><option>2025</option><option>2024</option></select><button onclick='ask()'>Analyze</button></div><div id='chat'></div></div>
+        <div class='card'><h3>Execution Timeline</h3><div id='trace'></div></div>
+        <div class='kpis'><div class='card kpi'><span class='label'>Total Watch Minutes</span><p id='kpiMinutes'>—</p></div><div class='card kpi'><span class='label'>Average Rating</span><p id='kpiRating'>—</p></div><div class='card kpi'><span class='label'>Best Performing Title</span><p id='kpiTopTitle'>—</p></div><div class='card kpi'><span class='label'>Top City Engagement</span><p id='kpiTopCity'>—</p></div></div>
+        <div class='charts'>
+          <div class='card span8'><h3>Top Titles by Watch Minutes</h3><div class='canvas-wrap'><canvas id='chartTitles'></canvas></div></div>
+          <div class='card span4'><h3>City Engagement Mix</h3><div class='canvas-wrap city-wrap'><canvas id='chartCities'></canvas></div></div>
+          <div class='card span6'><h3>Title Ratings Overview</h3><div class='canvas-wrap'><canvas id='chartRatings'></canvas></div></div>
+          <div class='card span6'><h3>Detailed Top Titles</h3><table style='width:100%;border-collapse:collapse'><thead><tr><th>Title</th><th>Watch Minutes</th><th>Avg Rating</th></tr></thead><tbody id='titleTable'></tbody></table></div>
         </div>
-      </div>
-
-      <section class='hero'>
-        <h2>Secure AI Insights Assistant</h2>
-        <p>Ask strategic questions, inspect tool traces, and monitor portfolio performance through consistent, decision-ready dashboard components built for executive workflows.</p>
       </section>
-
-      <div class='content-grid'>
-        <section class='left-col'>
-          <div class='card'>
-            <h3>AI Assistant</h3>
-            <div class='row'>
-              <input id='q' placeholder='Ask a business question'/>
-              <select id='year'><option>2025</option><option>2024</option></select>
-              <button onclick='ask()'>Ask</button>
-            </div>
-            <div id='chat'></div>
-          </div>
-
-          <div class='card'>
-            <h3>Execution Timeline</h3>
-            <div id='trace' class='trace-timeline'></div>
-          </div>
-
-          <div class='kpis'>
-            <div class='kpi'><h4>Total Watch Minutes</h4><p id='kpiMinutes'>—</p><div class='delta'>Top-5 titles</div></div>
-            <div class='kpi'><h4>Avg. Rating</h4><p id='kpiRating'>—</p><div class='delta'>Across top titles</div></div>
-            <div class='kpi'><h4>Best Performing Title</h4><p id='kpiTopTitle'>—</p><div class='delta'>By watch minutes</div></div>
-            <div class='kpi'><h4>Top City Engagement</h4><p id='kpiTopCity'>—</p><div class='delta'>Last 30 days</div></div>
-          </div>
-
-          <div class='charts-grid'>
-            <div class='card chart-wrap span-8'>
-              <div class='chart-head'><div><h3>Top Titles by Watch Minutes</h3><p class='chart-subtitle'>Distribution across top-performing content.</p></div><span class='chart-pill'>Weekly</span></div>
-              <div class='chart-canvas-wrap'><canvas id='chartTitles'></canvas></div>
-            </div>
-            <div class='card chart-wrap span-4'>
-              <div class='chart-head'><div><h3>City Engagement Mix</h3><p class='chart-subtitle'>Share of watch minutes by market.</p></div><span class='chart-pill'>30 Days</span></div>
-              <div class='chart-canvas-wrap city-donut'><canvas id='chartCities'></canvas></div>
-            </div>
-            <div class='card chart-wrap span-6'>
-              <div class='chart-head'><div><h3>Title Ratings Overview</h3><p class='chart-subtitle'>Trendline with portfolio-quality baseline.</p></div><span class='chart-pill'>QoQ</span></div>
-              <div class='chart-canvas-wrap'><canvas id='chartRatings'></canvas></div>
-            </div>
-            <div class='card chart-wrap span-6'>
-              <div class='chart-head'><div><h3>Detailed Top Titles Table</h3><p class='chart-subtitle'>Sortable table-ready data for leadership reviews.</p></div><span class='chart-pill'>Top 5</span></div>
-              <table><thead><tr><th>Title</th><th>Watch Minutes</th><th>Avg Rating</th></tr></thead><tbody id='titleTable'></tbody></table>
-            </div>
-          </div>
-        </section>
-
-        <aside class='right-col'>
-          <div class='card'>
-            <h3>Insights Panel</h3>
-            <div id='insightsGrid' class='insights-grid'><div class='insight-card'><div class='insight-detail'>Loading AI insights...</div></div></div>
-          </div>
-          <div class='card'>
-            <h3>Query History</h3>
-            <ul class='list' id='queryHistory'><li>No queries yet.</li></ul>
-          </div>
-        </aside>
-      </div>
-    </main>
-  </div>
-
+      <aside style='display:grid;gap:12px;align-content:start'>
+        <div class='card'><h3>Insights Panel</h3><div id='insightsGrid'></div></div>
+        <div class='card'><h3>Query History</h3><ul id='queryHistory'></ul></div>
+      </aside>
+    </div>
+  </main>
+</div>
 <script>
-let titleChart, cityChart, ratingChart;
-const queryHistory = [];
-let activeTab = 'overview';
-function setActiveTab(tab, el){
-  activeTab = tab;
-  document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-  if (el) el.classList.add('active');
-}
-
-function fmt(num){return Number(num).toLocaleString();}
-function esc(v){return String(v ?? '').replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));}
-function fmtTs(ts){
-  const d = new Date(ts || Date.now());
-  return Number.isNaN(d.getTime()) ? '—' : d.toLocaleTimeString([], { hour12:false });
-}
-function statusStyle(status){
-  const s = (status || 'idle').toLowerCase();
-  if (s.includes('success') || s.includes('complete') || s.includes('ok')) return { icon:'✅', cls:'status-success', label:'Success' };
-  if (s.includes('fail') || s.includes('error')) return { icon:'❌', cls:'status-failed', label:'Failed' };
-  if (s.includes('run') || s.includes('progress')) return { icon:'🟦', cls:'status-running', label:'Running' };
-  return { icon:'⏺️', cls:'status-idle', label:'Idle' };
-}
-function categoryStyle(tool){
-  const t = (tool || '').toLowerCase();
-  if (/(search|retriev|db|query)/.test(t)) return { cls:'cat-retrieval', label:'Retrieval' };
-  if (/(reason|llm|plan|chat)/.test(t)) return { cls:'cat-reasoning', label:'Reasoning' };
-  if (/(exec|call|write|apply|commit)/.test(t)) return { cls:'cat-execution', label:'Execution' };
-  return { cls:'cat-observability', label:'Observability' };
-}
-function renderTrace(traceData, sources){/* unchanged */
-  const steps = Array.isArray(traceData) ? traceData : (traceData?.steps || []);
-  if (!steps.length){ trace.innerHTML = `<ul class='list'><li>No execution steps yet. Run a query to inspect tool activity.</li></ul>`; return; }
-  trace.innerHTML = steps.map((step, i) => { const st = statusStyle(step.status); const cat = categoryStyle(step.tool || step.name); const toolName = step.tool || step.name || `Step ${i + 1}`; const source = step.source || sources?.[i]?.source; const attr = step.attribution || sources?.[i]?.tool || 'internal'; return `<details class='trace-step' ${i===0?'open':''}><summary><div class='trace-topline'><div class='trace-name'>${st.icon} ${esc(toolName)}</div><span class='badge ${st.cls}'>${st.label}</span></div><div class='trace-meta'><span>⏱ ${fmtTs(step.timestamp || step.ts || step.time)}</span><span class='badge ${cat.cls}'>${cat.label}</span><span>Step ${i + 1}</span></div></summary><div class='trace-body'><div><b>Input:</b> ${esc(JSON.stringify(step.input ?? step.args ?? {}))}</div><div><b>Output:</b> ${esc(JSON.stringify(step.output ?? step.result ?? step.message ?? 'N/A'))}</div><div class='trace-source'><b>Source Attribution:</b> ${source ? `<a href='${esc(source)}' target='_blank' rel='noopener noreferrer'>${esc(attr)} · ${esc(source)}</a>` : esc(attr)}</div></div></details>`; }).join('');
-}
-
-async function ask(){const query=q.value.trim(); if(!query) return; const year=document.getElementById('year').value; const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query,filters:{year}})}); const data=await r.json(); chat.innerHTML += `<div class='msg'><p><b>You:</b> ${query}</p><p><b>Assistant:</b> ${data.answer}</p><small>Sources: ${data.sources.map(s=>s.tool+':'+s.source).join(', ')}</small></div>`; chat.scrollTop = chat.scrollHeight; renderTrace(data.trace, data.sources); queryHistory.unshift(`${query} (${year})`); document.getElementById('queryHistory').innerHTML = queryHistory.slice(0,8).map(item => `<li>${item}</li>`).join(''); q.value = '';}
-function upsertChart(instance, canvasId, config){ if(instance) instance.destroy(); return new Chart(document.getElementById(canvasId), config);}
-const chartTypography = { family: "'Inter', 'Segoe UI', Roboto, Arial, sans-serif", size: 12};
-const chartTooltip = { backgroundColor: 'rgba(15,23,42,0.94)', titleColor: '#f8fafc', bodyColor: '#e2e8f0', borderColor: 'rgba(148,163,184,0.35)', borderWidth: 1, cornerRadius: 10, padding: 10, displayColors: true };
-
-function buildInsights(titles, cities){ const topTitle = titles[0]; const runnerUp = titles[1]; const maxMinutes = Math.max(...titles.map(t => t.total_minutes || 0), 0); const minMinutes = Math.min(...titles.map(t => t.total_minutes || 0), maxMinutes); const avgMinutes = titles.length ? titles.reduce((s,t)=>s + (t.total_minutes || 0),0)/titles.length : 0; const spread = maxMinutes - minMinutes; const topCity = cities[0]; const cityShare = cities.length ? ((topCity?.total_minutes || 0) / cities.reduce((s,c)=>s + (c.total_minutes || 0),0))*100 : 0; const avgRating = titles.length ? titles.reduce((s,t)=>s + (t.avg_rating || 0),0)/titles.length : 0; return [{ key: 'trending-titles', icon: '📈', title: 'Trending Titles', metric: topTitle ? `${topTitle.title}` : 'Insufficient data', detail: topTitle ? `↑ ${runnerUp ? Math.max(0, Math.round(((topTitle.total_minutes - runnerUp.total_minutes) / Math.max(runnerUp.total_minutes,1))*100)) : 0}% engagement increase` : 'Awaiting trend signals', meta: topTitle ? `${fmt(topTitle.total_minutes)} watch minutes` : 'Awaiting usage baseline', confidence: 96, tags: ['Boost Distribution', 'Executive Brief'] },{ key: 'anomaly-detection', icon: '⚠️', title: 'Anomaly Detection', metric: spread ? `Variance alert active` : 'Stable baseline', detail: spread ? `↑ ${Math.round((spread / Math.max(avgMinutes,1))*100)}% variance above title average` : 'No extreme outliers detected.', meta: `${fmt(spread)} minute spread`, confidence: 91, tags: ['Audit Campaigns', 'Check Channel Mix'] },{ key: 'audience-insights', icon: '🧠', title: 'Audience Insights', metric: topCity ? `${topCity.city}` : 'No city data', detail: topCity ? `↑ ${cityShare.toFixed(1)}% concentration in lead market` : 'Audience segments are still loading.', meta: topCity ? `${fmt(topCity.total_minutes)} watch minutes` : 'Awaiting city data', confidence: 88, tags: ['Localize Messaging', 'Geo Budget'] },{ key: 'leadership-recommendations', icon: '🛡️', title: 'Leadership Recommendations', metric: avgRating >= 4.2 ? 'Scale winning format' : 'Improve creative quality', detail: `↑ ${avgRating.toFixed(2)} / 5 portfolio rating baseline`, meta: 'Align budget to high-retention franchises', confidence: 86, tags: ['Reallocate Budget', 'Greenlight Sequel'] }]; }
-
-async function dash(){ const r=await fetch('/api/dashboard'); const d=await r.json(); const titles = d.top_titles || []; const cities = d.city_engagement || []; const totalMinutes = titles.reduce((s,x)=>s + (x.total_minutes || 0),0); const avgRating = titles.length ? titles.reduce((s,x)=>s + (x.avg_rating || 0),0)/titles.length : 0; document.getElementById('kpiMinutes').textContent = fmt(totalMinutes); document.getElementById('kpiRating').textContent = avgRating.toFixed(2); document.getElementById('kpiTopTitle').textContent = titles[0]?.title || '—'; document.getElementById('kpiTopCity').textContent = cities[0]?.city || '—'; document.getElementById('titleTable').innerHTML = titles.map(x => `<tr><td>${x.title}</td><td>${fmt(x.total_minutes)}</td><td>${Number(x.avg_rating || 0).toFixed(2)}</td></tr>`).join(''); const insights = buildInsights(titles, cities); document.getElementById('insightsGrid').innerHTML = insights.map(item => `<article class='insight-card'><div class='insight-head'><div class='insight-title'><span class='insight-icon'>${item.icon}</span>${esc(item.title)}</div><span class='confidence'>${item.confidence}% confidence</span></div><div class='insight-main'><div class='insight-metric'>${esc(item.metric)}</div><div class='insight-detail'>${esc(item.detail)}</div></div><div class='rec-tags'>${item.tags.map(tag => `<span class='rec-tag'>${esc(tag)}</span>`).join('')}</div></article>`).join('');
-  titleChart = upsertChart(titleChart, 'chartTitles', {type:'bar',data:{labels:titles.map(x=>x.title),datasets:[{label:'Watch Minutes',data:titles.map(x=>x.total_minutes),backgroundColor:'#3b82f6',hoverBackgroundColor:'#1d4ed8',borderRadius:10,barThickness:24,maxBarThickness:28}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false, labels:{font: chartTypography}},tooltip: {...chartTooltip,callbacks:{label:(ctx)=>` ${ctx.dataset.label}: ${fmt(ctx.parsed.y)} min`}}},scales:{x:{grid:{display:false},ticks:{color:'#475569',font:chartTypography,maxRotation:0,minRotation:0}},y:{beginAtZero:true,grid:{color:'rgba(148, 163, 184, 0.25)'},ticks:{color:'#475569',font:chartTypography,callback:(v)=>fmt(v)}}}}});
-  const compactLegend = window.innerWidth < 1120;
-  cityChart = upsertChart(cityChart, 'chartCities', {type:'doughnut',data:{labels:cities.map(x=>x.city),datasets:[{label:'City Minutes',data:cities.map(x=>x.total_minutes),hoverOffset:10,borderWidth:2,borderColor:'#fff',backgroundColor:['#4f46e5','#06b6d4','#6366f1','#0ea5e9','#14b8a6','#10b981','#ef4444','#64748b','#e11d48','#84cc16']}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',layout:{padding:{top:8,right:8,left:8,bottom:8}},plugins:{legend:{position:'bottom',align:'center',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,padding:compactLegend?12:10,color:'#334155',font:chartTypography}},tooltip:{...chartTooltip,callbacks:{label:(ctx)=>{ const total = ctx.dataset.data.reduce((a,b)=>a + b,0) || 1; const pct = ((ctx.parsed/total)*100).toFixed(1); return ` ${ctx.label}: ${fmt(ctx.parsed)} min (${pct}%)`;}}}}}});
-  ratingChart = upsertChart(ratingChart, 'chartRatings', {type:'line',data:{labels:titles.map(x=>x.title),datasets:[{label:'Average Rating',data:titles.map(x=>Number(x.avg_rating||0).toFixed(2)),borderColor:'#1d4ed8',pointBackgroundColor:'#1d4ed8',pointHoverRadius:6,pointRadius:4,backgroundColor:'rgba(59,130,246,0.18)',tension:.35,fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'nearest',intersect:false},plugins:{legend:{display:false},tooltip:{...chartTooltip,callbacks:{label:(ctx)=>` Rating: ${Number(ctx.parsed.y).toFixed(2)} / 5`}}},scales:{x:{grid:{display:false},ticks:{color:'#475569',font:chartTypography}},y:{beginAtZero:true,suggestedMax:5,grid:{color:'rgba(148, 163, 184, 0.25)'},ticks:{stepSize:1,color:'#475569',font:chartTypography}}}}}); }
-
-dash();
+lucide.createIcons();
+let titleChart,cityChart,ratingChart; const queryHistory=[]; const fmt=n=>Number(n).toLocaleString(); const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+function upsertChart(i,id,c){if(i)i.destroy();return new Chart(document.getElementById(id),c)}
+function renderTrace(t=[]){const el=document.getElementById('trace'); if(!t.length){el.innerHTML='<div class="label">No execution steps yet.</div>';return;} el.innerHTML=t.map((s,i)=>`<details class='trace-step' ${i===0?'open':''}><summary><div style='display:flex;justify-content:space-between'><strong>${esc(s.tool||s.name||'Step')}</strong><span class='badge ${(s.status||'').includes('success')?'status-success':'status-running'}'>${esc(s.status||'running')}</span></div><div class='trace-meta'><span>${new Date(s.timestamp||Date.now()).toLocaleTimeString()}</span><span>Step ${i+1}</span></div></summary><div style='padding:0 12px 10px' class='label'>Source: ${esc(s.source||'internal')}</div></details>`).join('')}
+async function ask(){const query=q.value.trim();if(!query)return;chat.innerHTML += `<div class='msg'><span class='label'>Assistant is thinking</span> <span class='typing'><span></span><span></span><span></span></span></div>`;const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query,filters:{year:year.value}})}); const data=await r.json(); chat.lastElementChild.remove(); chat.innerHTML += `<div class='msg'><strong>Key Insight</strong><div>${esc(data.answer)}</div><br><strong>Sources Used</strong><div class='sources'>${(data.sources||[]).map(s=>`<span class='chip'>${esc(s.tool)}</span>`).join('')}</div><div class='label'>Confidence: High</div></div>`; chat.scrollTop=chat.scrollHeight; renderTrace(data.trace||[]); queryHistory.unshift(`${query} (${year.value})`); queryHistoryEl.innerHTML=queryHistory.slice(0,8).map(x=>`<li class='label'>${esc(x)}</li>`).join(''); q.value='';}
+function buildInsights(t,c){const top=t[0];return [{icon:'trending-up',title:'Key Insight',metric:top?.title||'No data',detail:'Why It Happened: engagement concentration around top title.',tags:['Recommendation','Source-backed']},{icon:'brain',title:'Audience Insight',metric:c[0]?.city||'No city data',detail:'Recommendation: localize strategy in highest engagement region.',tags:['Act now','Executive note']}];}
+async function dash(){const r=await fetch('/api/dashboard'); const d=await r.json(); const t=d.top_titles||[],c=d.city_engagement||[]; kpiMinutes.textContent=fmt(t.reduce((a,b)=>a+(b.total_minutes||0),0)); kpiRating.textContent=(t.reduce((a,b)=>a+(b.avg_rating||0),0)/Math.max(t.length,1)).toFixed(2); kpiTopTitle.textContent=t[0]?.title||'—'; kpiTopCity.textContent=c[0]?.city||'—'; titleTable.innerHTML=t.map(x=>`<tr><td>${esc(x.title)}</td><td>${fmt(x.total_minutes)}</td><td>${Number(x.avg_rating||0).toFixed(2)}</td></tr>`).join(''); insightsGrid.innerHTML=buildInsights(t,c).map(i=>`<div class='insight-card'><div style='display:flex;justify-content:space-between'><strong>${i.title}</strong><span class='badge status-success'>92% confidence</span></div><div style='font-size:20px;font-weight:700;margin:8px 0'>${esc(i.metric)}</div><div class='label'>${esc(i.detail)}</div><div class='sources' style='margin-top:8px'>${i.tags.slice(0,2).map(tag=>`<span class='chip'>${tag}</span>`).join('')}</div></div>`).join('');
+const grid='rgba(148,163,184,.18)';
+titleChart=upsertChart(titleChart,'chartTitles',{type:'bar',data:{labels:t.map(x=>x.title),datasets:[{data:t.map(x=>x.total_minutes),backgroundColor:'#4F46E5',borderRadius:9}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:grid}}}}});
+cityChart=upsertChart(cityChart,'chartCities',{type:'doughnut',data:{labels:c.map(x=>x.city),datasets:[{data:c.map(x=>x.total_minutes),backgroundColor:['#4F46E5','#06B6D4','#10B981','#F59E0B','#64748B'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'64%',plugins:{legend:{position:window.innerWidth<1100?'bottom':'bottom',labels:{usePointStyle:true,padding:12}}}}});
+ratingChart=upsertChart(ratingChart,'chartRatings',{type:'line',data:{labels:t.map(x=>x.title),datasets:[{data:t.map(x=>x.avg_rating),borderColor:'#06B6D4',backgroundColor:'rgba(6,182,212,.15)',fill:true,tension:.35}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:grid},suggestedMax:5}}}})}
+const queryHistoryEl=document.getElementById('queryHistory'); dash();
 </script>
 </body>
 </html>

@@ -10,8 +10,6 @@
 
     :root {
       --bg: #f5f7fb;
-      --sidebar-bg: #111827;
-      --sidebar-muted: #94a3b8;
       --surface: #ffffff;
       --surface-subtle: #f8fafc;
       --border: rgba(15, 23, 42, 0.06);
@@ -37,34 +35,15 @@
       min-height: 100vh;
     }
 
-    .app { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+    .app { min-height: 100vh; }
 
-    .sidebar {
-      background: var(--sidebar-bg);
-      color: #e2e8f0;
-      padding: 28px 16px;
-      border-right: 1px solid rgba(255,255,255,.08);
+    .main {
+      width: min(1360px, 100%);
+      margin: 0 auto;
+      padding: 28px;
+      display: grid;
+      gap: 22px;
     }
-    .brand { font-size: 15px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 24px; }
-    .nav-item {
-      display: block;
-      width: 100%;
-      text-align: left;
-      font-size: 13px;
-      color: var(--sidebar-muted);
-      padding: 10px 12px;
-      border-radius: var(--radius-sm);
-      margin-bottom: 6px;
-      font-weight: 600;
-      border: 0;
-      background: transparent;
-      box-shadow: none;
-      cursor: pointer;
-      transition: all .2s ease;
-    }
-    .nav-item.active, .nav-item:hover { color: var(--primary); background: rgba(79,70,229,.12); }
-
-    .main { padding: var(--layout); display: grid; gap: 18px; }
     .topbar {
       display: flex; justify-content: space-between; align-items: center;
       background: rgba(255,255,255,.75); border: 1px solid rgba(255,255,255,.3);
@@ -180,8 +159,6 @@
     .list li { border-bottom: 1px solid var(--border); padding: 10px 0; font-size: 13px; color: #334155; }
 
     @media (max-width: 1160px) {
-      .app { grid-template-columns: 1fr; }
-      .sidebar { display: none; }
       .content-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 980px) {
@@ -196,16 +173,6 @@
 </head>
 <body>
   <div class='app'>
-    <aside class='sidebar'>
-      <div class='brand'>Secure AI Insights</div>
-      <button class='nav-item active' data-tab='overview' onclick='setActiveTab("overview", this)'>Overview</button>
-      <button class='nav-item' data-tab='assistant' onclick='setActiveTab("assistant", this)'>Assistant</button>
-      <button class='nav-item' data-tab='trace' onclick='setActiveTab("trace", this)'>Tool Trace</button>
-      <button class='nav-item' data-tab='analytics' onclick='setActiveTab("analytics", this)'>Analytics</button>
-      <button class='nav-item' data-tab='insights' onclick='setActiveTab("insights", this)'>Insights</button>
-      <button class='nav-item' data-tab='history' onclick='setActiveTab("history", this)'>History</button>
-    </aside>
-
     <main class='main'>
       <div class='topbar'>
         <div>

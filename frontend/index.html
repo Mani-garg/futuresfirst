@@ -9,241 +9,168 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
     :root {
-      --bg: #f4f7fb;
-      --sidebar: #0b1020;
+      --bg: #f3f6fb;
+      --sidebar-bg: #0f172a;
+      --sidebar-muted: #8ea0bd;
       --surface: #ffffff;
-      --surface-soft: #f8fafc;
+      --surface-subtle: #f8fafc;
+      --border: #dbe3ee;
       --text: #0f172a;
-      --muted: #64748b;
+      --text-muted: #5b6b82;
       --primary: #2563eb;
-      --primary-strong: #1d4ed8;
-      --border: #e2e8f0;
-      --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.08);
-      --shadow-hover: 0 18px 40px rgba(15, 23, 42, 0.12);
-      --grid-line: rgba(148, 163, 184, 0.28);
-      --radius-lg: 20px;
-      --radius-md: 16px;
-      --radius-sm: 12px;
+      --primary-soft: #e8f0ff;
+      --success: #15803d;
+      --danger: #b91c1c;
+      --shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+      --radius-card: 14px;
+      --radius-sm: 10px;
+      --layout: 24px;
     }
 
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
-      background: radial-gradient(circle at 15% -5%, #dbeafe 0%, #eef3fb 35%, var(--bg) 70%);
-      color: var(--text);
       font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #f8fbff 0%, var(--bg) 160px);
       min-height: 100vh;
     }
 
-    .app {
-      display: grid;
-      grid-template-columns: 250px 1fr;
-      min-height: 100vh;
-    }
+    .app { display: grid; grid-template-columns: 264px 1fr; min-height: 100vh; }
 
     .sidebar {
-      background: linear-gradient(180deg, #0b1020 0%, #131a31 100%);
-      color: #dbe4ff;
-      padding: 24px 18px;
-      border-right: 1px solid rgba(148, 163, 184, 0.2);
+      background: var(--sidebar-bg);
+      color: #e2e8f0;
+      padding: 28px 16px;
+      border-right: 1px solid #1e293b;
     }
-
-    .brand { font-size: 18px; font-weight: 700; margin-bottom: 22px; }
+    .brand { font-size: 15px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 24px; }
     .nav-item {
       display: block;
+      font-size: 13px;
+      color: var(--sidebar-muted);
       padding: 10px 12px;
-      border-radius: 10px;
-      color: #cbd5e1;
-      margin-bottom: 8px;
-      font-size: 14px;
-      transition: all .2s ease;
+      border-radius: var(--radius-sm);
+      margin-bottom: 6px;
+      font-weight: 600;
+      transition: .15s ease;
     }
-    .nav-item.active, .nav-item:hover { background: rgba(37, 99, 235, 0.18); color: #eff6ff; transform: translateX(2px); }
+    .nav-item.active, .nav-item:hover { color: #fff; background: rgba(59,130,246,.16); }
 
-    .main { padding: 20px 26px 28px; }
+    .main { padding: var(--layout); display: grid; gap: 18px; }
     .topbar {
-      background: rgba(255,255,255,0.75);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      box-shadow: var(--shadow-soft);
-      backdrop-filter: blur(10px);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 18px;
-      margin-bottom: 18px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(255,255,255,.88); border: 1px solid var(--border);
+      border-radius: var(--radius-card); padding: 16px 20px; box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
     }
-
-    .topbar h1 { margin: 0; font-size: 18px; font-weight: 700; }
-    .topbar p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+    .topbar h1 { margin: 0; font-size: 20px; letter-spacing: -0.02em; }
+    .topbar p { margin: 4px 0 0; font-size: 13px; color: var(--text-muted); }
 
     .hero {
-      background: linear-gradient(125deg, #0f172a 0%, #1d4ed8 50%, #38bdf8 100%);
+      border: 1px solid #bfd3ff;
+      background: linear-gradient(110deg, #1e3a8a 0%, #2563eb 55%, #0ea5e9 100%);
       color: #fff;
-      border-radius: var(--radius-lg);
-      padding: 22px;
-      box-shadow: var(--shadow-soft);
-      margin-bottom: 18px;
-      animation: rise .4s ease;
+      border-radius: var(--radius-card);
+      padding: 20px 22px;
     }
-    .hero h2 { margin: 0; font-size: 28px; letter-spacing: -0.02em; }
-    .hero p { margin: 8px 0 0; opacity: .92; max-width: 780px; }
+    .hero h2 { margin: 0; font-size: 28px; letter-spacing: -.02em; }
+    .hero p { margin: 8px 0 0; max-width: 820px; opacity: .94; font-size: 14px; line-height: 1.55; }
 
-    .panel {
+    .content-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(300px, .95fr); gap: 18px; }
+    .left-col, .right-col { display: grid; gap: 18px; align-content: start; }
+
+    .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-soft);
-      padding: 18px;
-      transition: transform .2s ease, box-shadow .2s ease;
-      animation: rise .45s ease;
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow);
+      padding: 16px;
     }
-    .panel:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+    .card h3 { margin: 0 0 12px; font-size: 14px; letter-spacing: .01em; text-transform: uppercase; color: #334155; }
 
-    .row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; }
     input, select, button {
-      border-radius: 10px;
-      border: 1px solid #cbd5e1;
-      padding: 10px 12px;
-      font-size: 14px;
-      font-family: inherit;
-      background: #fff;
+      height: 40px; border: 1px solid #cdd7e5; border-radius: var(--radius-sm);
+      font: inherit; font-size: 14px; padding: 0 12px; background: #fff;
     }
+    input:focus, select:focus { outline: 2px solid #bfdbfe; border-color: #93c5fd; }
     #q { flex: 1 1 420px; }
     button {
-      border: none;
-      background: linear-gradient(135deg, var(--primary), var(--primary-strong));
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-      transition: transform .15s ease, filter .15s ease;
+      border: 0; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; font-weight: 700;
+      cursor: pointer; box-shadow: 0 5px 14px rgba(37,99,235,.28); transition: transform .12s ease;
     }
-    button:hover { filter: brightness(1.04); transform: translateY(-1px); }
+    button:hover { transform: translateY(-1px); }
 
-    #chat {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 12px;
-      margin-top: 12px;
-      min-height: 150px;
-      max-height: 280px;
-      overflow: auto;
-      background: var(--surface-soft);
-    }
-    .msg { margin: 0 0 10px; padding-bottom: 10px; border-bottom: 1px dashed #d6deea; }
-    .msg:last-child { margin-bottom: 0; border-bottom: 0; }
+    #chat { margin-top: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface-subtle); min-height: 160px; max-height: 290px; overflow: auto; padding: 12px; }
+    .msg { margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed #d6deea; font-size: 13px; line-height: 1.45; }
 
-    .trace-timeline { display: grid; gap: 10px; min-height: 80px; }
-    .trace-step { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #f8fafc; }
-    .trace-step summary { list-style: none; cursor: pointer; padding: 11px 12px; display: grid; gap: 8px; }
+    .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+    .kpi { padding: 14px; border: 1px solid var(--border); border-radius: 12px; background: #fff; }
+    .kpi h4 { margin: 0 0 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; color: var(--text-muted); }
+    .kpi p { margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -.02em; }
+    .kpi .delta { margin-top: 5px; color: #0369a1; font-size: 12px; }
+
+    .charts-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+    .chart-wrap { min-height: 300px; display: grid; gap: 10px; }
+    .chart-head { display: flex; justify-content: space-between; gap: 8px; align-items: start; }
+    .chart-wrap h3 { margin: 0; font-size: 15px; letter-spacing: -.01em; }
+    .chart-subtitle { margin: 3px 0 0; color: var(--text-muted); font-size: 12px; }
+    .chart-pill { font-size: 11px; border-radius: 999px; padding: 4px 9px; background: var(--primary-soft); border: 1px solid #bfd3ff; color: #1d4ed8; font-weight: 700; }
+    .chart-canvas-wrap { position: relative; height: 230px; }
+    .chart-canvas-wrap.city-donut { height: 248px; }
+    .span-8 { grid-column: span 8; }
+    .span-6 { grid-column: span 6; }
+    .span-4 { grid-column: span 4; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--border); }
+    th { color: #334155; background: #f8fafc; font-size: 12px; text-transform: uppercase; letter-spacing: .02em; }
+
+    .trace-timeline { display: grid; gap: 10px; }
+    .trace-step { border: 1px solid var(--border); border-radius: 10px; background: var(--surface-subtle); overflow: hidden; }
+    .trace-step summary { list-style: none; padding: 10px 12px; cursor: pointer; display: grid; gap: 8px; }
     .trace-step summary::-webkit-details-marker { display: none; }
-    .trace-topline { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-    .trace-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
-    .trace-name { font-weight: 600; font-size: 14px; }
-    .badge { border-radius: 999px; padding: 2px 8px; font-size: 11px; font-weight: 600; border: 1px solid transparent; letter-spacing: .02em; }
-    .badge.status-success { color: #166534; background: rgba(22,163,74,.16); border-color: rgba(22,163,74,.34); }
-    .badge.status-running { color: #1d4ed8; background: rgba(37,99,235,.16); border-color: rgba(59,130,246,.34); }
-    .badge.status-failed { color: #991b1b; background: rgba(220,38,38,.12); border-color: rgba(248,113,113,.35); }
-    .badge.status-idle { color: #334155; background: rgba(148,163,184,.18); border-color: rgba(148,163,184,.35); }
-    .badge.cat-retrieval { color: #3730a3; background: rgba(99,102,241,.16); border-color: rgba(129,140,248,.35); }
-    .badge.cat-reasoning { color: #9d174d; background: rgba(190,24,93,.12); border-color: rgba(236,72,153,.32); }
-    .badge.cat-execution { color: #155e75; background: rgba(8,145,178,.14); border-color: rgba(6,182,212,.34); }
-    .badge.cat-observability { color: #854d0e; background: rgba(202,138,4,.14); border-color: rgba(250,204,21,.35); }
+    .trace-topline, .insight-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .trace-meta { display: flex; flex-wrap: wrap; gap: 8px; font-size: 12px; color: var(--text-muted); }
+    .trace-name { font-size: 13px; font-weight: 700; }
     .trace-body { border-top: 1px dashed var(--border); padding: 10px 12px; font-size: 12px; color: #334155; display: grid; gap: 6px; }
     .trace-source a { color: #1d4ed8; text-decoration: none; }
-    .trace-source a:hover { text-decoration: underline; }
 
-    .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0; }
-    .kpi {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      box-shadow: var(--shadow-soft);
-      transition: all .2s ease;
-    }
-    .kpi:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
-    .kpi h4 { margin: 0 0 8px; color: var(--muted); font-size: 13px; font-weight: 600; }
-    .kpi p { margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
-    .kpi .delta { color: #0f766e; font-size: 12px; margin-top: 6px; }
+    .badge { border-radius: 999px; font-size: 11px; font-weight: 700; padding: 2px 8px; border: 1px solid transparent; }
+    .status-success { color: var(--success); background: rgba(22,163,74,.13); border-color: rgba(22,163,74,.3); }
+    .status-running { color: #1d4ed8; background: rgba(37,99,235,.12); border-color: rgba(37,99,235,.3); }
+    .status-failed { color: var(--danger); background: rgba(220,38,38,.11); border-color: rgba(220,38,38,.25); }
+    .status-idle { color: #334155; background: rgba(148,163,184,.18); border-color: rgba(148,163,184,.3); }
+    .cat-retrieval { color: #4338ca; background: rgba(99,102,241,.12); border-color: rgba(99,102,241,.3); }
+    .cat-reasoning { color: #9d174d; background: rgba(236,72,153,.12); border-color: rgba(236,72,153,.3); }
+    .cat-execution { color: #0e7490; background: rgba(6,182,212,.12); border-color: rgba(6,182,212,.3); }
+    .cat-observability { color: #854d0e; background: rgba(245,158,11,.12); border-color: rgba(245,158,11,.3); }
 
-    .content-grid { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(300px, 1fr); gap: 16px; }
-    .left-col, .right-col { display: grid; gap: 16px; }
-
-    .charts-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
-    .chart-wrap {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-soft);
-      padding: 16px;
-      display: grid;
-      gap: 10px;
-      min-height: 310px;
-    }
-    .chart-wrap h3 { margin: 0; font-size: 15px; }
-    .chart-head { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
-    .chart-subtitle { margin: 2px 0 0; font-size: 12px; color: var(--muted); }
-    .chart-pill { font-size: 11px; color:#1e40af; background:#dbeafe; border:1px solid #bfdbfe; border-radius: 999px; padding: 4px 10px; font-weight: 600; white-space: nowrap; display: inline-flex; align-items: center; line-height: 1; }
-    .chart-canvas-wrap { position: relative; height: 230px; }
-    .chart-canvas-wrap.city-donut { height: 250px; }
-    .chart-wrap.span-6 { grid-column: span 6; }
-    .chart-wrap.span-8 { grid-column: span 8; }
-    .chart-wrap.span-4 { grid-column: span 4; }
-
-    table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    th, td { text-align: left; padding: 9px 6px; border-bottom: 1px solid var(--border); }
-    th { color: #334155; background: #f8fafc; }
+    .insights-grid { display: grid; gap: 10px; }
+    .insight-card { border: 1px solid var(--border); border-radius: 12px; padding: 12px; background: #fff; }
+    .insight-title { font-size: 13px; font-weight: 700; display: flex; gap: 7px; align-items: center; }
+    .confidence { font-size: 11px; padding: 3px 8px; border-radius: 999px; border: 1px solid #bfdbfe; background: #eff6ff; color: #1e40af; font-weight: 700; }
+    .insight-main { display: grid; gap: 5px; margin-top: 8px; }
+    .insight-metric { font-size: 19px; font-weight: 800; letter-spacing: -.02em; }
+    .insight-detail { font-size: 12px; color: var(--text-muted); line-height: 1.45; }
+    .rec-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .rec-tag { font-size: 11px; padding: 3px 8px; border-radius: 999px; border: 1px solid #d0dae7; background: #f8fafc; color: #334155; font-weight: 600; }
 
     .list { list-style: none; margin: 0; padding: 0; }
-    .list li { padding: 10px 0; border-bottom: 1px solid var(--border); color: #334155; font-size: 13px; }
-    .insights-grid { display: grid; gap: 10px; }
-    .insight-card {
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-      padding: 12px;
-      display: grid;
-      gap: 9px;
-    }
-    .insight-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-    .insight-title { font-size: 13px; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 7px; }
-    .insight-icon { font-size: 16px; }
-    .confidence {
-      font-size: 11px;
-      border-radius: 999px;
-      padding: 3px 8px;
-      font-weight: 700;
-      border: 1px solid #bfdbfe;
-      background: #eff6ff;
-      color: #1e40af;
-    }
-    .insight-main { display: grid; gap: 4px; }
-    .insight-metric { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; color: #0f172a; }
-    .insight-detail { font-size: 12px; color: var(--muted); }
-    .rec-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-    .rec-tag {
-      font-size: 11px;
-      font-weight: 600;
-      color: #334155;
-      background: #f1f5f9;
-      border: 1px solid #cbd5e1;
-      border-radius: 999px;
-      padding: 3px 8px;
-    }
+    .list li { border-bottom: 1px solid var(--border); padding: 10px 0; font-size: 13px; color: #334155; }
 
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 1080px) {
+    @media (max-width: 1160px) {
       .app { grid-template-columns: 1fr; }
       .sidebar { display: none; }
-      .content-grid, .charts-grid { grid-template-columns: 1fr; }
-      .chart-wrap.span-6, .chart-wrap.span-8, .chart-wrap.span-4 { grid-column: auto; min-height: 280px; }
-      .main { padding: 16px; }
+      .content-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 980px) {
+      .main { padding: 14px; }
+      .charts-grid { grid-template-columns: 1fr; }
+      .span-8, .span-6, .span-4 { grid-column: auto; }
+      .topbar { align-items: start; }
+      .hero h2 { font-size: 24px; }
     }
   </style>
 </head>
@@ -263,18 +190,18 @@
       <div class='topbar'>
         <div>
           <h1>Enterprise Analytics Workspace</h1>
-          <p>Unified AI assistant, observability traces, and decision-ready metrics.</p>
+          <p>Unified AI copilot, execution observability, and leadership-grade media intelligence.</p>
         </div>
       </div>
 
       <section class='hero'>
         <h2>Secure AI Insights Assistant</h2>
-        <p>Ask strategic questions, inspect tool traces, and monitor performance trends through premium-grade analytics components.</p>
+        <p>Ask strategic questions, inspect tool traces, and monitor portfolio performance through consistent, decision-ready dashboard components built for executive workflows.</p>
       </section>
 
       <div class='content-grid'>
         <section class='left-col'>
-          <div class='panel'>
+          <div class='card'>
             <h3>AI Assistant</h3>
             <div class='row'>
               <input id='q' placeholder='Ask a business question'/>
@@ -284,7 +211,7 @@
             <div id='chat'></div>
           </div>
 
-          <div class='panel'>
+          <div class='card'>
             <h3>Execution Timeline</h3>
             <div id='trace' class='trace-timeline'></div>
           </div>
@@ -297,64 +224,33 @@
           </div>
 
           <div class='charts-grid'>
-            <div class='chart-wrap span-8'>
-              <div class='chart-head'>
-                <div>
-                  <h3>Top Titles by Watch Minutes</h3>
-                  <p class='chart-subtitle'>Distribution across top-performing content.</p>
-                </div>
-                <span class='chart-pill'>Weekly</span>
-              </div>
+            <div class='card chart-wrap span-8'>
+              <div class='chart-head'><div><h3>Top Titles by Watch Minutes</h3><p class='chart-subtitle'>Distribution across top-performing content.</p></div><span class='chart-pill'>Weekly</span></div>
               <div class='chart-canvas-wrap'><canvas id='chartTitles'></canvas></div>
             </div>
-            <div class='chart-wrap span-4'>
-              <div class='chart-head'>
-                <div>
-                  <h3>City Engagement Mix</h3>
-                  <p class='chart-subtitle'>Share of watch minutes by market.</p>
-                </div>
-                <span class='chart-pill'>30 Days</span>
-              </div>
+            <div class='card chart-wrap span-4'>
+              <div class='chart-head'><div><h3>City Engagement Mix</h3><p class='chart-subtitle'>Share of watch minutes by market.</p></div><span class='chart-pill'>30 Days</span></div>
               <div class='chart-canvas-wrap city-donut'><canvas id='chartCities'></canvas></div>
             </div>
-            <div class='chart-wrap span-6'>
-              <div class='chart-head'>
-                <div>
-                  <h3>Title Ratings Overview</h3>
-                  <p class='chart-subtitle'>Trendline with portfolio-quality baseline.</p>
-                </div>
-                <span class='chart-pill'>QoQ</span>
-              </div>
+            <div class='card chart-wrap span-6'>
+              <div class='chart-head'><div><h3>Title Ratings Overview</h3><p class='chart-subtitle'>Trendline with portfolio-quality baseline.</p></div><span class='chart-pill'>QoQ</span></div>
               <div class='chart-canvas-wrap'><canvas id='chartRatings'></canvas></div>
             </div>
-            <div class='chart-wrap span-6'>
-              <div class='chart-head'>
-                <div>
-                  <h3>Detailed Top Titles Table</h3>
-                  <p class='chart-subtitle'>Sortable table-ready data for leadership reviews.</p>
-                </div>
-                <span class='chart-pill'>Top 5</span>
-              </div>
-              <table>
-                <thead><tr><th>Title</th><th>Watch Minutes</th><th>Avg Rating</th></tr></thead>
-                <tbody id='titleTable'></tbody>
-              </table>
+            <div class='card chart-wrap span-6'>
+              <div class='chart-head'><div><h3>Detailed Top Titles Table</h3><p class='chart-subtitle'>Sortable table-ready data for leadership reviews.</p></div><span class='chart-pill'>Top 5</span></div>
+              <table><thead><tr><th>Title</th><th>Watch Minutes</th><th>Avg Rating</th></tr></thead><tbody id='titleTable'></tbody></table>
             </div>
           </div>
         </section>
 
         <aside class='right-col'>
-          <div class='panel'>
+          <div class='card'>
             <h3>Insights Panel</h3>
-            <div id='insightsGrid' class='insights-grid'>
-              <div class='insight-card'><div class='insight-detail'>Loading AI insights...</div></div>
-            </div>
+            <div id='insightsGrid' class='insights-grid'><div class='insight-card'><div class='insight-detail'>Loading AI insights...</div></div></div>
           </div>
-          <div class='panel'>
+          <div class='card'>
             <h3>Query History</h3>
-            <ul class='list' id='queryHistory'>
-              <li>No queries yet.</li>
-            </ul>
+            <ul class='list' id='queryHistory'><li>No queries yet.</li></ul>
           </div>
         </aside>
       </div>
@@ -385,243 +281,23 @@ function categoryStyle(tool){
   if (/(exec|call|write|apply|commit)/.test(t)) return { cls:'cat-execution', label:'Execution' };
   return { cls:'cat-observability', label:'Observability' };
 }
-function renderTrace(traceData, sources){
+function renderTrace(traceData, sources){/* unchanged */
   const steps = Array.isArray(traceData) ? traceData : (traceData?.steps || []);
-  if (!steps.length){
-    trace.innerHTML = `<ul class='list'><li>No execution steps yet. Run a query to inspect tool activity.</li></ul>`;
-    return;
-  }
-  trace.innerHTML = steps.map((step, i) => {
-    const st = statusStyle(step.status);
-    const cat = categoryStyle(step.tool || step.name);
-    const toolName = step.tool || step.name || `Step ${i + 1}`;
-    const source = step.source || sources?.[i]?.source;
-    const attr = step.attribution || sources?.[i]?.tool || 'internal';
-    return `<details class='trace-step' ${i===0?'open':''}>
-      <summary>
-        <div class='trace-topline'>
-          <div class='trace-name'>${st.icon} ${esc(toolName)}</div>
-          <span class='badge ${st.cls}'>${st.label}</span>
-        </div>
-        <div class='trace-meta'>
-          <span>⏱ ${fmtTs(step.timestamp || step.ts || step.time)}</span>
-          <span class='badge ${cat.cls}'>${cat.label}</span>
-          <span>Step ${i + 1}</span>
-        </div>
-      </summary>
-      <div class='trace-body'>
-        <div><b>Input:</b> ${esc(JSON.stringify(step.input ?? step.args ?? {}))}</div>
-        <div><b>Output:</b> ${esc(JSON.stringify(step.output ?? step.result ?? step.message ?? 'N/A'))}</div>
-        <div class='trace-source'><b>Source Attribution:</b> ${source ? `<a href='${esc(source)}' target='_blank' rel='noopener noreferrer'>${esc(attr)} · ${esc(source)}</a>` : esc(attr)}</div>
-      </div>
-    </details>`;
-  }).join('');
+  if (!steps.length){ trace.innerHTML = `<ul class='list'><li>No execution steps yet. Run a query to inspect tool activity.</li></ul>`; return; }
+  trace.innerHTML = steps.map((step, i) => { const st = statusStyle(step.status); const cat = categoryStyle(step.tool || step.name); const toolName = step.tool || step.name || `Step ${i + 1}`; const source = step.source || sources?.[i]?.source; const attr = step.attribution || sources?.[i]?.tool || 'internal'; return `<details class='trace-step' ${i===0?'open':''}><summary><div class='trace-topline'><div class='trace-name'>${st.icon} ${esc(toolName)}</div><span class='badge ${st.cls}'>${st.label}</span></div><div class='trace-meta'><span>⏱ ${fmtTs(step.timestamp || step.ts || step.time)}</span><span class='badge ${cat.cls}'>${cat.label}</span><span>Step ${i + 1}</span></div></summary><div class='trace-body'><div><b>Input:</b> ${esc(JSON.stringify(step.input ?? step.args ?? {}))}</div><div><b>Output:</b> ${esc(JSON.stringify(step.output ?? step.result ?? step.message ?? 'N/A'))}</div><div class='trace-source'><b>Source Attribution:</b> ${source ? `<a href='${esc(source)}' target='_blank' rel='noopener noreferrer'>${esc(attr)} · ${esc(source)}</a>` : esc(attr)}</div></div></details>`; }).join('');
 }
 
-async function ask(){
-  const query=q.value.trim();
-  if(!query) return;
-  const year=document.getElementById('year').value;
-  const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query,filters:{year}})});
-  const data=await r.json();
-  chat.innerHTML += `<div class='msg'><p><b>You:</b> ${query}</p><p><b>Assistant:</b> ${data.answer}</p><small>Sources: ${data.sources.map(s=>s.tool+':'+s.source).join(', ')}</small></div>`;
-  chat.scrollTop = chat.scrollHeight;
-  renderTrace(data.trace, data.sources);
+async function ask(){const query=q.value.trim(); if(!query) return; const year=document.getElementById('year').value; const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query,filters:{year}})}); const data=await r.json(); chat.innerHTML += `<div class='msg'><p><b>You:</b> ${query}</p><p><b>Assistant:</b> ${data.answer}</p><small>Sources: ${data.sources.map(s=>s.tool+':'+s.source).join(', ')}</small></div>`; chat.scrollTop = chat.scrollHeight; renderTrace(data.trace, data.sources); queryHistory.unshift(`${query} (${year})`); document.getElementById('queryHistory').innerHTML = queryHistory.slice(0,8).map(item => `<li>${item}</li>`).join(''); q.value = '';}
+function upsertChart(instance, canvasId, config){ if(instance) instance.destroy(); return new Chart(document.getElementById(canvasId), config);}
+const chartTypography = { family: "'Inter', 'Segoe UI', Roboto, Arial, sans-serif", size: 12};
+const chartTooltip = { backgroundColor: 'rgba(15,23,42,0.94)', titleColor: '#f8fafc', bodyColor: '#e2e8f0', borderColor: 'rgba(148,163,184,0.35)', borderWidth: 1, cornerRadius: 10, padding: 10, displayColors: true };
 
-  queryHistory.unshift(`${query} (${year})`);
-  document.getElementById('queryHistory').innerHTML = queryHistory.slice(0,8).map(item => `<li>${item}</li>`).join('');
+function buildInsights(titles, cities){ const topTitle = titles[0]; const runnerUp = titles[1]; const maxMinutes = Math.max(...titles.map(t => t.total_minutes || 0), 0); const minMinutes = Math.min(...titles.map(t => t.total_minutes || 0), maxMinutes); const avgMinutes = titles.length ? titles.reduce((s,t)=>s + (t.total_minutes || 0),0)/titles.length : 0; const spread = maxMinutes - minMinutes; const topCity = cities[0]; const cityShare = cities.length ? ((topCity?.total_minutes || 0) / cities.reduce((s,c)=>s + (c.total_minutes || 0),0))*100 : 0; const avgRating = titles.length ? titles.reduce((s,t)=>s + (t.avg_rating || 0),0)/titles.length : 0; return [{ key: 'trending-titles', icon: '🔥', title: 'Trending Titles', metric: topTitle ? `${topTitle.title}` : 'Insufficient data', detail: topTitle ? `${fmt(topTitle.total_minutes)} watch minutes · +${runnerUp ? Math.max(0, Math.round(((topTitle.total_minutes - runnerUp.total_minutes) / Math.max(runnerUp.total_minutes,1))*100)) : 0}% vs next title` : 'Awaiting trend signals', confidence: 96, tags: ['Boost Distribution', 'Pin on Home', 'Cross-Promo'] },{ key: 'anomaly-detection', icon: '🧭', title: 'Anomaly Detection', metric: spread ? `${fmt(spread)} min spread` : 'Stable baseline', detail: spread ? `Watch-time variance is ${Math.round((spread / Math.max(avgMinutes,1))*100)}% above title average.` : 'No extreme outliers detected.', confidence: 91, tags: ['Audit Campaigns', 'Validate Metadata', 'Check Channel Mix'] },{ key: 'audience-insights', icon: '👥', title: 'Audience Insights', metric: topCity ? `${topCity.city}` : 'No city data', detail: topCity ? `${cityShare.toFixed(1)}% of city watch minutes from leading market.` : 'Audience segments are still loading.', confidence: 88, tags: ['Localize Messaging', 'Prime-Time Push', 'Geo Budget'] },{ key: 'leadership-recommendations', icon: '🧠', title: 'Leadership Recommendations', metric: avgRating >= 4.2 ? 'Scale winning format' : 'Improve creative quality', detail: `Portfolio rating baseline: ${avgRating.toFixed(2)} / 5. Align funding to high-retention franchises.`, confidence: 86, tags: ['Reallocate Budget', 'Greenlight Sequel', 'Executive Brief'] },{ key: 'engagement-spikes', icon: '📈', title: 'Engagement Spikes', metric: topTitle ? `+${Math.round(((topTitle.total_minutes || 0) / Math.max(avgMinutes,1) - 1) * 100)}% above avg` : 'No spike detected', detail: topTitle ? `${topTitle.title} is materially outperforming the portfolio baseline.` : 'Spike detection requires title activity.', confidence: 90, tags: ['Increase Frequency', 'Retarget Viewers', 'Replicate Hook'] },{ key: 'weak-performance', icon: '⚠️', title: 'Weak Performance Alerts', metric: titles.length ? `${titles[titles.length - 1].title}` : 'None', detail: titles.length ? `${fmt(titles[titles.length - 1].total_minutes || 0)} minutes is below benchmark; intervene with refreshed packaging.` : 'No underperforming title detected.', confidence: 84, tags: ['Refresh Thumbnail', 'Revise CTA', 'A/B Test Intro'] }]; }
 
-  q.value = '';
-}
-
-function upsertChart(instance, canvasId, config){
-  if(instance) instance.destroy();
-  return new Chart(document.getElementById(canvasId), config);
-}
-const chartTypography = {
-  family: "'Inter', 'Segoe UI', Roboto, Arial, sans-serif",
-  size: 12
-};
-const chartTooltip = {
-  backgroundColor: 'rgba(15,23,42,0.94)',
-  titleColor: '#f8fafc',
-  bodyColor: '#e2e8f0',
-  borderColor: 'rgba(148,163,184,0.35)',
-  borderWidth: 1,
-  cornerRadius: 10,
-  padding: 10,
-  displayColors: true
-};
-
-function buildInsights(titles, cities){
-  const topTitle = titles[0];
-  const runnerUp = titles[1];
-  const maxMinutes = Math.max(...titles.map(t => t.total_minutes || 0), 0);
-  const minMinutes = Math.min(...titles.map(t => t.total_minutes || 0), maxMinutes);
-  const avgMinutes = titles.length ? titles.reduce((s,t)=>s + (t.total_minutes || 0),0)/titles.length : 0;
-  const spread = maxMinutes - minMinutes;
-  const topCity = cities[0];
-  const cityShare = cities.length ? ((topCity?.total_minutes || 0) / cities.reduce((s,c)=>s + (c.total_minutes || 0),0))*100 : 0;
-  const avgRating = titles.length ? titles.reduce((s,t)=>s + (t.avg_rating || 0),0)/titles.length : 0;
-
-  return [
-    {
-      key: 'trending-titles',
-      icon: '🔥',
-      title: 'Trending Titles',
-      metric: topTitle ? `${topTitle.title}` : 'Insufficient data',
-      detail: topTitle ? `${fmt(topTitle.total_minutes)} watch minutes · +${runnerUp ? Math.max(0, Math.round(((topTitle.total_minutes - runnerUp.total_minutes) / Math.max(runnerUp.total_minutes,1))*100)) : 0}% vs next title` : 'Awaiting trend signals',
-      confidence: 96,
-      tags: ['Boost Distribution', 'Pin on Home', 'Cross-Promo']
-    },
-    {
-      key: 'anomaly-detection',
-      icon: '🧭',
-      title: 'Anomaly Detection',
-      metric: spread ? `${fmt(spread)} min spread` : 'Stable baseline',
-      detail: spread ? `Watch-time variance is ${Math.round((spread / Math.max(avgMinutes,1))*100)}% above title average.` : 'No extreme outliers detected.',
-      confidence: 91,
-      tags: ['Audit Campaigns', 'Validate Metadata', 'Check Channel Mix']
-    },
-    {
-      key: 'audience-insights',
-      icon: '👥',
-      title: 'Audience Insights',
-      metric: topCity ? `${topCity.city}` : 'No city data',
-      detail: topCity ? `${cityShare.toFixed(1)}% of city watch minutes from leading market.` : 'Audience segments are still loading.',
-      confidence: 88,
-      tags: ['Localize Messaging', 'Prime-Time Push', 'Geo Budget']
-    },
-    {
-      key: 'leadership-recommendations',
-      icon: '🧠',
-      title: 'Leadership Recommendations',
-      metric: avgRating >= 4.2 ? 'Scale winning format' : 'Improve creative quality',
-      detail: `Portfolio rating baseline: ${avgRating.toFixed(2)} / 5. Align funding to high-retention franchises.`,
-      confidence: 86,
-      tags: ['Reallocate Budget', 'Greenlight Sequel', 'Executive Brief']
-    },
-    {
-      key: 'engagement-spikes',
-      icon: '📈',
-      title: 'Engagement Spikes',
-      metric: topTitle ? `+${Math.round(((topTitle.total_minutes || 0) / Math.max(avgMinutes,1) - 1) * 100)}% above avg` : 'No spike detected',
-      detail: topTitle ? `${topTitle.title} is materially outperforming the portfolio baseline.` : 'Spike detection requires title activity.',
-      confidence: 90,
-      tags: ['Increase Frequency', 'Retarget Viewers', 'Replicate Hook']
-    },
-    {
-      key: 'weak-performance',
-      icon: '⚠️',
-      title: 'Weak Performance Alerts',
-      metric: titles.length ? `${titles[titles.length - 1].title}` : 'None',
-      detail: titles.length ? `${fmt(titles[titles.length - 1].total_minutes || 0)} minutes is below benchmark; intervene with refreshed packaging.` : 'No underperforming title detected.',
-      confidence: 84,
-      tags: ['Refresh Thumbnail', 'Revise CTA', 'A/B Test Intro']
-    }
-  ];
-}
-
-async function dash(){
-  const r=await fetch('/api/dashboard');
-  const d=await r.json();
-
-  const titles = d.top_titles || [];
-  const cities = d.city_engagement || [];
-
-  const totalMinutes = titles.reduce((s,x)=>s + (x.total_minutes || 0),0);
-  const avgRating = titles.length ? titles.reduce((s,x)=>s + (x.avg_rating || 0),0)/titles.length : 0;
-
-  document.getElementById('kpiMinutes').textContent = fmt(totalMinutes);
-  document.getElementById('kpiRating').textContent = avgRating.toFixed(2);
-  document.getElementById('kpiTopTitle').textContent = titles[0]?.title || '—';
-  document.getElementById('kpiTopCity').textContent = cities[0]?.city || '—';
-
-  document.getElementById('titleTable').innerHTML = titles.map(x =>
-    `<tr><td>${x.title}</td><td>${fmt(x.total_minutes)}</td><td>${Number(x.avg_rating || 0).toFixed(2)}</td></tr>`
-  ).join('');
-
-  const insights = buildInsights(titles, cities);
-  document.getElementById('insightsGrid').innerHTML = insights.map(item => `
-    <article class='insight-card'>
-      <div class='insight-head'>
-        <div class='insight-title'><span class='insight-icon'>${item.icon}</span>${esc(item.title)}</div>
-        <span class='confidence'>${item.confidence}% confidence</span>
-      </div>
-      <div class='insight-main'>
-        <div class='insight-metric'>${esc(item.metric)}</div>
-        <div class='insight-detail'>${esc(item.detail)}</div>
-      </div>
-      <div class='rec-tags'>${item.tags.map(tag => `<span class='rec-tag'>${esc(tag)}</span>`).join('')}</div>
-    </article>
-  `).join('');
-
-  titleChart = upsertChart(titleChart, 'chartTitles', {
-    type:'bar',
-    data:{labels:titles.map(x=>x.title),datasets:[{label:'Watch Minutes',data:titles.map(x=>x.total_minutes),backgroundColor:'#3b82f6',hoverBackgroundColor:'#1d4ed8',borderRadius:10,barThickness:24,maxBarThickness:28}]},
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      interaction:{mode:'index',intersect:false},
-      plugins:{
-        legend:{display:false, labels:{font: chartTypography}},
-        tooltip: {
-          ...chartTooltip,
-          callbacks:{label:(ctx)=>` ${ctx.dataset.label}: ${fmt(ctx.parsed.y)} min`}
-        }
-      },
-      scales:{
-        x:{grid:{display:false},ticks:{color:'#475569',font:chartTypography,maxRotation:0,minRotation:0}},
-        y:{beginAtZero:true,grid:{color:'rgba(148, 163, 184, 0.25)'},ticks:{color:'#475569',font:chartTypography,callback:(v)=>fmt(v)}}
-      }
-    }
-  });
-
-  cityChart = upsertChart(cityChart, 'chartCities', {
-    type:'doughnut',
-    data:{labels:cities.map(x=>x.city),datasets:[{label:'City Minutes',data:cities.map(x=>x.total_minutes),hoverOffset:10,borderWidth:2,borderColor:'#fff',backgroundColor:['#2563eb','#0891b2','#7c3aed','#0ea5e9','#f59e0b','#16a34a','#ef4444','#64748b','#e11d48','#84cc16']} ]},
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      cutout:'62%',
-      layout:{padding:{top:6,right:6,left:6,bottom:0}},
-      plugins:{
-        legend:{position:'bottom',align:'center',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,padding:10,color:'#334155',font:chartTypography}},
-        tooltip:{
-          ...chartTooltip,
-          callbacks:{
-            label:(ctx)=>{
-              const total = ctx.dataset.data.reduce((a,b)=>a + b,0) || 1;
-              const pct = ((ctx.parsed/total)*100).toFixed(1);
-              return ` ${ctx.label}: ${fmt(ctx.parsed)} min (${pct}%)`;
-            }
-          }
-        }
-      }
-    }
-  });
-
-  ratingChart = upsertChart(ratingChart, 'chartRatings', {
-    type:'line',
-    data:{labels:titles.map(x=>x.title),datasets:[{label:'Average Rating',data:titles.map(x=>Number(x.avg_rating||0).toFixed(2)),borderColor:'#1d4ed8',pointBackgroundColor:'#1d4ed8',pointHoverRadius:6,pointRadius:4,backgroundColor:'rgba(59,130,246,0.18)',tension:.35,fill:true}]},
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      interaction:{mode:'nearest',intersect:false},
-      plugins:{
-        legend:{display:false},
-        tooltip:{
-          ...chartTooltip,
-          callbacks:{label:(ctx)=>` Rating: ${Number(ctx.parsed.y).toFixed(2)} / 5`}
-        }
-      },
-      scales:{
-        x:{grid:{display:false},ticks:{color:'#475569',font:chartTypography}},
-        y:{beginAtZero:true,suggestedMax:5,grid:{color:'rgba(148, 163, 184, 0.25)'},ticks:{stepSize:1,color:'#475569',font:chartTypography}}
-      }
-    }
-  });
-}
+async function dash(){ const r=await fetch('/api/dashboard'); const d=await r.json(); const titles = d.top_titles || []; const cities = d.city_engagement || []; const totalMinutes = titles.reduce((s,x)=>s + (x.total_minutes || 0),0); const avgRating = titles.length ? titles.reduce((s,x)=>s + (x.avg_rating || 0),0)/titles.length : 0; document.getElementById('kpiMinutes').textContent = fmt(totalMinutes); document.getElementById('kpiRating').textContent = avgRating.toFixed(2); document.getElementById('kpiTopTitle').textContent = titles[0]?.title || '—'; document.getElementById('kpiTopCity').textContent = cities[0]?.city || '—'; document.getElementById('titleTable').innerHTML = titles.map(x => `<tr><td>${x.title}</td><td>${fmt(x.total_minutes)}</td><td>${Number(x.avg_rating || 0).toFixed(2)}</td></tr>`).join(''); const insights = buildInsights(titles, cities); document.getElementById('insightsGrid').innerHTML = insights.map(item => `<article class='insight-card'><div class='insight-head'><div class='insight-title'><span class='insight-icon'>${item.icon}</span>${esc(item.title)}</div><span class='confidence'>${item.confidence}% confidence</span></div><div class='insight-main'><div class='insight-metric'>${esc(item.metric)}</div><div class='insight-detail'>${esc(item.detail)}</div></div><div class='rec-tags'>${item.tags.map(tag => `<span class='rec-tag'>${esc(tag)}</span>`).join('')}</div></article>`).join('');
+  titleChart = upsertChart(titleChart, 'chartTitles', {type:'bar',data:{labels:titles.map(x=>x.title),datasets:[{label:'Watch Minutes',data:titles.map(x=>x.total_minutes),backgroundColor:'#3b82f6',hoverBackgroundColor:'#1d4ed8',borderRadius:10,barThickness:24,maxBarThickness:28}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false, labels:{font: chartTypography}},tooltip: {...chartTooltip,callbacks:{label:(ctx)=>` ${ctx.dataset.label}: ${fmt(ctx.parsed.y)} min`}}},scales:{x:{grid:{display:false},ticks:{color:'#475569',font:chartTypography,maxRotation:0,minRotation:0}},y:{beginAtZero:true,grid:{color:'rgba(148, 163, 184, 0.25)'},ticks:{color:'#475569',font:chartTypography,callback:(v)=>fmt(v)}}}}});
+  cityChart = upsertChart(cityChart, 'chartCities', {type:'doughnut',data:{labels:cities.map(x=>x.city),datasets:[{label:'City Minutes',data:cities.map(x=>x.total_minutes),hoverOffset:10,borderWidth:2,borderColor:'#fff',backgroundColor:['#2563eb','#0891b2','#7c3aed','#0ea5e9','#f59e0b','#16a34a','#ef4444','#64748b','#e11d48','#84cc16']}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',layout:{padding:{top:6,right:6,left:6,bottom:0}},plugins:{legend:{position:'bottom',align:'center',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,padding:10,color:'#334155',font:chartTypography}},tooltip:{...chartTooltip,callbacks:{label:(ctx)=>{ const total = ctx.dataset.data.reduce((a,b)=>a + b,0) || 1; const pct = ((ctx.parsed/total)*100).toFixed(1); return ` ${ctx.label}: ${fmt(ctx.parsed)} min (${pct}%)`;}}}}}});
+  ratingChart = upsertChart(ratingChart, 'chartRatings', {type:'line',data:{labels:titles.map(x=>x.title),datasets:[{label:'Average Rating',data:titles.map(x=>Number(x.avg_rating||0).toFixed(2)),borderColor:'#1d4ed8',pointBackgroundColor:'#1d4ed8',pointHoverRadius:6,pointRadius:4,backgroundColor:'rgba(59,130,246,0.18)',tension:.35,fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'nearest',intersect:false},plugins:{legend:{display:false},tooltip:{...chartTooltip,callbacks:{label:(ctx)=>` Rating: ${Number(ctx.parsed.y).toFixed(2)} / 5`}}},scales:{x:{grid:{display:false},ticks:{color:'#475569',font:chartTypography}},y:{beginAtZero:true,suggestedMax:5,grid:{color:'rgba(148, 163, 184, 0.25)'},ticks:{stepSize:1,color:'#475569',font:chartTypography}}}}}); }
 
 dash();
 </script>

@@ -32,7 +32,7 @@ class SqlTool:
         "city_engagement": """
             SELECT v.city, SUM(w.watch_minutes) AS total_minutes
             FROM watch_activity w JOIN viewers v ON v.viewer_id = w.viewer_id
-            WHERE w.watched_at >= date('now', '-30 day')
+            WHERE date(w.watched_at) >= date((SELECT MAX(date(watched_at)) FROM watch_activity), '-30 day')
             GROUP BY v.city ORDER BY total_minutes DESC LIMIT 10
         """,
     }

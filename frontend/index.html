@@ -9,19 +9,20 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
     :root {
-      --bg: #f3f6fb;
-      --sidebar-bg: #0f172a;
-      --sidebar-muted: #8ea0bd;
+      --bg: #f5f7fb;
+      --sidebar-bg: #111827;
+      --sidebar-muted: #94a3b8;
       --surface: #ffffff;
       --surface-subtle: #f8fafc;
-      --border: #dbe3ee;
+      --border: rgba(15, 23, 42, 0.06);
       --text: #0f172a;
       --text-muted: #5b6b82;
-      --primary: #2563eb;
-      --primary-soft: #e8f0ff;
-      --success: #15803d;
+      --primary: #4f46e5;
+      --primary-soft: rgba(79, 70, 229, 0.12);
+      --accent: #06b6d4;
+      --success: #10b981;
       --danger: #b91c1c;
-      --shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+      --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 10px 24px rgba(15, 23, 42, 0.04);
       --radius-card: 14px;
       --radius-sm: 10px;
       --layout: 24px;
@@ -32,35 +33,41 @@
       margin: 0;
       font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
       color: var(--text);
-      background: linear-gradient(180deg, #f8fbff 0%, var(--bg) 160px);
+      background: linear-gradient(180deg, #f9fbff 0%, var(--bg) 180px);
       min-height: 100vh;
     }
 
-    .app { display: grid; grid-template-columns: 264px 1fr; min-height: 100vh; }
+    .app { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
 
     .sidebar {
       background: var(--sidebar-bg);
       color: #e2e8f0;
       padding: 28px 16px;
-      border-right: 1px solid #1e293b;
+      border-right: 1px solid rgba(255,255,255,.08);
     }
     .brand { font-size: 15px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 24px; }
     .nav-item {
       display: block;
+      width: 100%;
+      text-align: left;
       font-size: 13px;
       color: var(--sidebar-muted);
       padding: 10px 12px;
       border-radius: var(--radius-sm);
       margin-bottom: 6px;
       font-weight: 600;
-      transition: .15s ease;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      cursor: pointer;
+      transition: all .2s ease;
     }
-    .nav-item.active, .nav-item:hover { color: #fff; background: rgba(59,130,246,.16); }
+    .nav-item.active, .nav-item:hover { color: var(--primary); background: rgba(79,70,229,.12); }
 
     .main { padding: var(--layout); display: grid; gap: 18px; }
     .topbar {
       display: flex; justify-content: space-between; align-items: center;
-      background: rgba(255,255,255,.88); border: 1px solid var(--border);
+      background: rgba(255,255,255,.75); border: 1px solid rgba(255,255,255,.3);
       border-radius: var(--radius-card); padding: 16px 20px; box-shadow: var(--shadow);
       backdrop-filter: blur(8px);
     }
@@ -68,21 +75,26 @@
     .topbar p { margin: 4px 0 0; font-size: 13px; color: var(--text-muted); }
 
     .hero {
-      border: 1px solid #bfd3ff;
-      background: linear-gradient(110deg, #1e3a8a 0%, #2563eb 55%, #0ea5e9 100%);
-      color: #fff;
+      border: 1px solid rgba(255,255,255,0.25);
+      background:
+        radial-gradient(circle at 85% 20%, rgba(6,182,212,0.2) 0%, transparent 45%),
+        radial-gradient(circle at 15% 90%, rgba(79,70,229,0.24) 0%, transparent 50%),
+        linear-gradient(125deg, rgba(17,24,39,0.92), rgba(31,41,55,0.88));
+      color: #e2e8f0;
       border-radius: var(--radius-card);
-      padding: 20px 22px;
+      padding: 28px;
+      box-shadow: 0 10px 34px rgba(17,24,39,.14);
+      backdrop-filter: blur(14px);
     }
-    .hero h2 { margin: 0; font-size: 28px; letter-spacing: -.02em; }
-    .hero p { margin: 8px 0 0; max-width: 820px; opacity: .94; font-size: 14px; line-height: 1.55; }
+    .hero h2 { margin: 0; font-size: 30px; letter-spacing: -.03em; font-weight: 700; color: #f8fafc; }
+    .hero p { margin: 10px 0 0; max-width: 760px; opacity: .86; font-size: 13px; line-height: 1.65; font-weight: 400; }
 
     .content-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(300px, .95fr); gap: 18px; }
     .left-col, .right-col { display: grid; gap: 18px; align-content: start; }
 
     .card {
       background: var(--surface);
-      border: 1px solid var(--border);
+      border: 1px solid rgba(255,255,255,0.2);
       border-radius: var(--radius-card);
       box-shadow: var(--shadow);
       padding: 16px;
@@ -106,7 +118,7 @@
     .msg { margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed #d6deea; font-size: 13px; line-height: 1.45; }
 
     .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
-    .kpi { padding: 14px; border: 1px solid var(--border); border-radius: 12px; background: #fff; }
+    .kpi { padding: 14px; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
     .kpi h4 { margin: 0 0 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; color: var(--text-muted); }
     .kpi p { margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -.02em; }
     .kpi .delta { margin-top: 5px; color: #0369a1; font-size: 12px; }
@@ -118,7 +130,14 @@
     .chart-subtitle { margin: 3px 0 0; color: var(--text-muted); font-size: 12px; }
     .chart-pill { font-size: 11px; border-radius: 999px; padding: 4px 9px; background: var(--primary-soft); border: 1px solid #bfd3ff; color: #1d4ed8; font-weight: 700; }
     .chart-canvas-wrap { position: relative; height: 230px; }
-    .chart-canvas-wrap.city-donut { height: 248px; }
+    .chart-canvas-wrap.city-donut {
+      min-height: 248px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 6px;
+    }
     .span-8 { grid-column: span 8; }
     .span-6 { grid-column: span 6; }
     .span-4 { grid-column: span 4; }
@@ -148,7 +167,7 @@
     .cat-observability { color: #854d0e; background: rgba(245,158,11,.12); border-color: rgba(245,158,11,.3); }
 
     .insights-grid { display: grid; gap: 10px; }
-    .insight-card { border: 1px solid var(--border); border-radius: 12px; padding: 12px; background: #fff; }
+    .insight-card { border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 12px; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
     .insight-title { font-size: 13px; font-weight: 700; display: flex; gap: 7px; align-items: center; }
     .confidence { font-size: 11px; padding: 3px 8px; border-radius: 999px; border: 1px solid #bfdbfe; background: #eff6ff; color: #1e40af; font-weight: 700; }
     .insight-main { display: grid; gap: 5px; margin-top: 8px; }
@@ -171,6 +190,7 @@
       .span-8, .span-6, .span-4 { grid-column: auto; }
       .topbar { align-items: start; }
       .hero h2 { font-size: 24px; }
+      .chart-canvas-wrap.city-donut { min-height: 280px; }
     }
   </style>
 </head>
@@ -178,12 +198,12 @@
   <div class='app'>
     <aside class='sidebar'>
       <div class='brand'>Secure AI Insights</div>
-      <span class='nav-item active'>Overview</span>
-      <span class='nav-item'>Assistant</span>
-      <span class='nav-item'>Tool Trace</span>
-      <span class='nav-item'>Analytics</span>
-      <span class='nav-item'>Insights</span>
-      <span class='nav-item'>History</span>
+      <button class='nav-item active' data-tab='overview' onclick='setActiveTab("overview", this)'>Overview</button>
+      <button class='nav-item' data-tab='assistant' onclick='setActiveTab("assistant", this)'>Assistant</button>
+      <button class='nav-item' data-tab='trace' onclick='setActiveTab("trace", this)'>Tool Trace</button>
+      <button class='nav-item' data-tab='analytics' onclick='setActiveTab("analytics", this)'>Analytics</button>
+      <button class='nav-item' data-tab='insights' onclick='setActiveTab("insights", this)'>Insights</button>
+      <button class='nav-item' data-tab='history' onclick='setActiveTab("history", this)'>History</button>
     </aside>
 
     <main class='main'>
@@ -260,6 +280,12 @@
 <script>
 let titleChart, cityChart, ratingChart;
 const queryHistory = [];
+let activeTab = 'overview';
+function setActiveTab(tab, el){
+  activeTab = tab;
+  document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+  if (el) el.classList.add('active');
+}
 
 function fmt(num){return Number(num).toLocaleString();}
 function esc(v){return String(v ?? '').replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));}
@@ -292,11 +318,12 @@ function upsertChart(instance, canvasId, config){ if(instance) instance.destroy(
 const chartTypography = { family: "'Inter', 'Segoe UI', Roboto, Arial, sans-serif", size: 12};
 const chartTooltip = { backgroundColor: 'rgba(15,23,42,0.94)', titleColor: '#f8fafc', bodyColor: '#e2e8f0', borderColor: 'rgba(148,163,184,0.35)', borderWidth: 1, cornerRadius: 10, padding: 10, displayColors: true };
 
-function buildInsights(titles, cities){ const topTitle = titles[0]; const runnerUp = titles[1]; const maxMinutes = Math.max(...titles.map(t => t.total_minutes || 0), 0); const minMinutes = Math.min(...titles.map(t => t.total_minutes || 0), maxMinutes); const avgMinutes = titles.length ? titles.reduce((s,t)=>s + (t.total_minutes || 0),0)/titles.length : 0; const spread = maxMinutes - minMinutes; const topCity = cities[0]; const cityShare = cities.length ? ((topCity?.total_minutes || 0) / cities.reduce((s,c)=>s + (c.total_minutes || 0),0))*100 : 0; const avgRating = titles.length ? titles.reduce((s,t)=>s + (t.avg_rating || 0),0)/titles.length : 0; return [{ key: 'trending-titles', icon: '🔥', title: 'Trending Titles', metric: topTitle ? `${topTitle.title}` : 'Insufficient data', detail: topTitle ? `${fmt(topTitle.total_minutes)} watch minutes · +${runnerUp ? Math.max(0, Math.round(((topTitle.total_minutes - runnerUp.total_minutes) / Math.max(runnerUp.total_minutes,1))*100)) : 0}% vs next title` : 'Awaiting trend signals', confidence: 96, tags: ['Boost Distribution', 'Pin on Home', 'Cross-Promo'] },{ key: 'anomaly-detection', icon: '🧭', title: 'Anomaly Detection', metric: spread ? `${fmt(spread)} min spread` : 'Stable baseline', detail: spread ? `Watch-time variance is ${Math.round((spread / Math.max(avgMinutes,1))*100)}% above title average.` : 'No extreme outliers detected.', confidence: 91, tags: ['Audit Campaigns', 'Validate Metadata', 'Check Channel Mix'] },{ key: 'audience-insights', icon: '👥', title: 'Audience Insights', metric: topCity ? `${topCity.city}` : 'No city data', detail: topCity ? `${cityShare.toFixed(1)}% of city watch minutes from leading market.` : 'Audience segments are still loading.', confidence: 88, tags: ['Localize Messaging', 'Prime-Time Push', 'Geo Budget'] },{ key: 'leadership-recommendations', icon: '🧠', title: 'Leadership Recommendations', metric: avgRating >= 4.2 ? 'Scale winning format' : 'Improve creative quality', detail: `Portfolio rating baseline: ${avgRating.toFixed(2)} / 5. Align funding to high-retention franchises.`, confidence: 86, tags: ['Reallocate Budget', 'Greenlight Sequel', 'Executive Brief'] },{ key: 'engagement-spikes', icon: '📈', title: 'Engagement Spikes', metric: topTitle ? `+${Math.round(((topTitle.total_minutes || 0) / Math.max(avgMinutes,1) - 1) * 100)}% above avg` : 'No spike detected', detail: topTitle ? `${topTitle.title} is materially outperforming the portfolio baseline.` : 'Spike detection requires title activity.', confidence: 90, tags: ['Increase Frequency', 'Retarget Viewers', 'Replicate Hook'] },{ key: 'weak-performance', icon: '⚠️', title: 'Weak Performance Alerts', metric: titles.length ? `${titles[titles.length - 1].title}` : 'None', detail: titles.length ? `${fmt(titles[titles.length - 1].total_minutes || 0)} minutes is below benchmark; intervene with refreshed packaging.` : 'No underperforming title detected.', confidence: 84, tags: ['Refresh Thumbnail', 'Revise CTA', 'A/B Test Intro'] }]; }
+function buildInsights(titles, cities){ const topTitle = titles[0]; const runnerUp = titles[1]; const maxMinutes = Math.max(...titles.map(t => t.total_minutes || 0), 0); const minMinutes = Math.min(...titles.map(t => t.total_minutes || 0), maxMinutes); const avgMinutes = titles.length ? titles.reduce((s,t)=>s + (t.total_minutes || 0),0)/titles.length : 0; const spread = maxMinutes - minMinutes; const topCity = cities[0]; const cityShare = cities.length ? ((topCity?.total_minutes || 0) / cities.reduce((s,c)=>s + (c.total_minutes || 0),0))*100 : 0; const avgRating = titles.length ? titles.reduce((s,t)=>s + (t.avg_rating || 0),0)/titles.length : 0; return [{ key: 'trending-titles', icon: '📈', title: 'Trending Titles', metric: topTitle ? `${topTitle.title}` : 'Insufficient data', detail: topTitle ? `↑ ${runnerUp ? Math.max(0, Math.round(((topTitle.total_minutes - runnerUp.total_minutes) / Math.max(runnerUp.total_minutes,1))*100)) : 0}% engagement increase` : 'Awaiting trend signals', meta: topTitle ? `${fmt(topTitle.total_minutes)} watch minutes` : 'Awaiting usage baseline', confidence: 96, tags: ['Boost Distribution', 'Executive Brief'] },{ key: 'anomaly-detection', icon: '⚠️', title: 'Anomaly Detection', metric: spread ? `Variance alert active` : 'Stable baseline', detail: spread ? `↑ ${Math.round((spread / Math.max(avgMinutes,1))*100)}% variance above title average` : 'No extreme outliers detected.', meta: `${fmt(spread)} minute spread`, confidence: 91, tags: ['Audit Campaigns', 'Check Channel Mix'] },{ key: 'audience-insights', icon: '🧠', title: 'Audience Insights', metric: topCity ? `${topCity.city}` : 'No city data', detail: topCity ? `↑ ${cityShare.toFixed(1)}% concentration in lead market` : 'Audience segments are still loading.', meta: topCity ? `${fmt(topCity.total_minutes)} watch minutes` : 'Awaiting city data', confidence: 88, tags: ['Localize Messaging', 'Geo Budget'] },{ key: 'leadership-recommendations', icon: '🛡️', title: 'Leadership Recommendations', metric: avgRating >= 4.2 ? 'Scale winning format' : 'Improve creative quality', detail: `↑ ${avgRating.toFixed(2)} / 5 portfolio rating baseline`, meta: 'Align budget to high-retention franchises', confidence: 86, tags: ['Reallocate Budget', 'Greenlight Sequel'] }]; }
 
 async function dash(){ const r=await fetch('/api/dashboard'); const d=await r.json(); const titles = d.top_titles || []; const cities = d.city_engagement || []; const totalMinutes = titles.reduce((s,x)=>s + (x.total_minutes || 0),0); const avgRating = titles.length ? titles.reduce((s,x)=>s + (x.avg_rating || 0),0)/titles.length : 0; document.getElementById('kpiMinutes').textContent = fmt(totalMinutes); document.getElementById('kpiRating').textContent = avgRating.toFixed(2); document.getElementById('kpiTopTitle').textContent = titles[0]?.title || '—'; document.getElementById('kpiTopCity').textContent = cities[0]?.city || '—'; document.getElementById('titleTable').innerHTML = titles.map(x => `<tr><td>${x.title}</td><td>${fmt(x.total_minutes)}</td><td>${Number(x.avg_rating || 0).toFixed(2)}</td></tr>`).join(''); const insights = buildInsights(titles, cities); document.getElementById('insightsGrid').innerHTML = insights.map(item => `<article class='insight-card'><div class='insight-head'><div class='insight-title'><span class='insight-icon'>${item.icon}</span>${esc(item.title)}</div><span class='confidence'>${item.confidence}% confidence</span></div><div class='insight-main'><div class='insight-metric'>${esc(item.metric)}</div><div class='insight-detail'>${esc(item.detail)}</div></div><div class='rec-tags'>${item.tags.map(tag => `<span class='rec-tag'>${esc(tag)}</span>`).join('')}</div></article>`).join('');
   titleChart = upsertChart(titleChart, 'chartTitles', {type:'bar',data:{labels:titles.map(x=>x.title),datasets:[{label:'Watch Minutes',data:titles.map(x=>x.total_minutes),backgroundColor:'#3b82f6',hoverBackgroundColor:'#1d4ed8',borderRadius:10,barThickness:24,maxBarThickness:28}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false, labels:{font: chartTypography}},tooltip: {...chartTooltip,callbacks:{label:(ctx)=>` ${ctx.dataset.label}: ${fmt(ctx.parsed.y)} min`}}},scales:{x:{grid:{display:false},ticks:{color:'#475569',font:chartTypography,maxRotation:0,minRotation:0}},y:{beginAtZero:true,grid:{color:'rgba(148, 163, 184, 0.25)'},ticks:{color:'#475569',font:chartTypography,callback:(v)=>fmt(v)}}}}});
-  cityChart = upsertChart(cityChart, 'chartCities', {type:'doughnut',data:{labels:cities.map(x=>x.city),datasets:[{label:'City Minutes',data:cities.map(x=>x.total_minutes),hoverOffset:10,borderWidth:2,borderColor:'#fff',backgroundColor:['#2563eb','#0891b2','#7c3aed','#0ea5e9','#f59e0b','#16a34a','#ef4444','#64748b','#e11d48','#84cc16']}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',layout:{padding:{top:6,right:6,left:6,bottom:0}},plugins:{legend:{position:'bottom',align:'center',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,padding:10,color:'#334155',font:chartTypography}},tooltip:{...chartTooltip,callbacks:{label:(ctx)=>{ const total = ctx.dataset.data.reduce((a,b)=>a + b,0) || 1; const pct = ((ctx.parsed/total)*100).toFixed(1); return ` ${ctx.label}: ${fmt(ctx.parsed)} min (${pct}%)`;}}}}}});
+  const compactLegend = window.innerWidth < 1120;
+  cityChart = upsertChart(cityChart, 'chartCities', {type:'doughnut',data:{labels:cities.map(x=>x.city),datasets:[{label:'City Minutes',data:cities.map(x=>x.total_minutes),hoverOffset:10,borderWidth:2,borderColor:'#fff',backgroundColor:['#4f46e5','#06b6d4','#6366f1','#0ea5e9','#14b8a6','#10b981','#ef4444','#64748b','#e11d48','#84cc16']}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',layout:{padding:{top:8,right:8,left:8,bottom:8}},plugins:{legend:{position:'bottom',align:'center',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,padding:compactLegend?12:10,color:'#334155',font:chartTypography}},tooltip:{...chartTooltip,callbacks:{label:(ctx)=>{ const total = ctx.dataset.data.reduce((a,b)=>a + b,0) || 1; const pct = ((ctx.parsed/total)*100).toFixed(1); return ` ${ctx.label}: ${fmt(ctx.parsed)} min (${pct}%)`;}}}}}});
   ratingChart = upsertChart(ratingChart, 'chartRatings', {type:'line',data:{labels:titles.map(x=>x.title),datasets:[{label:'Average Rating',data:titles.map(x=>Number(x.avg_rating||0).toFixed(2)),borderColor:'#1d4ed8',pointBackgroundColor:'#1d4ed8',pointHoverRadius:6,pointRadius:4,backgroundColor:'rgba(59,130,246,0.18)',tension:.35,fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'nearest',intersect:false},plugins:{legend:{display:false},tooltip:{...chartTooltip,callbacks:{label:(ctx)=>` Rating: ${Number(ctx.parsed.y).toFixed(2)} / 5`}}},scales:{x:{grid:{display:false},ticks:{color:'#475569',font:chartTypography}},y:{beginAtZero:true,suggestedMax:5,grid:{color:'rgba(148, 163, 184, 0.25)'},ticks:{stepSize:1,color:'#475569',font:chartTypography}}}}}); }
 
 dash();

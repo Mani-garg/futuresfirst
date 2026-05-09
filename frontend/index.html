@@ -1,11 +1,204 @@
-<!doctype html><html><head><meta charset='utf-8'><title>Secure AI Insights</title><script src='https://cdn.jsdelivr.net/npm/chart.js'></script><style>body{font-family:Arial;margin:20px}#chat{border:1px solid #ccc;padding:12px;height:220px;overflow:auto} .row{display:flex;gap:10px} pre{background:#f7f7f7;padding:8px}</style></head><body>
-<h2>Secure AI Insights Assistant</h2>
-<div class='row'><input id='q' style='width:70%' placeholder='Ask a business question'/><select id='year'><option>2025</option><option>2024</option></select><button onclick='ask()'>Ask</button></div>
-<div id='chat'></div>
-<h3>Tool Trace</h3><pre id='trace'></pre>
-<h3>Top Titles (2025)</h3><canvas id='chart' width='600' height='220'></canvas>
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <title>Secure AI Insights</title>
+  <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+  <style>
+    :root {
+      --bg: #f3f6fb;
+      --panel: #ffffff;
+      --text: #1b2430;
+      --muted: #6b7280;
+      --brand: #1d4ed8;
+      --brand-soft: #dbeafe;
+      --border: #e5e7eb;
+      --success: #047857;
+      --shadow: 0 10px 30px rgba(15, 23, 42, .08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(circle at top, #ecf4ff 0%, var(--bg) 45%);
+      color: var(--text);
+      padding: 24px;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .hero {
+      background: linear-gradient(120deg, #0f172a, #1d4ed8);
+      color: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+    .hero h2 { margin: 0 0 6px; font-size: 30px; }
+    .hero p { margin: 0; opacity: .9; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; }
+    input, select, button {
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+    #q { flex: 1 1 600px; }
+    button { background: var(--brand); color: white; border: none; cursor: pointer; }
+    button:hover { background: #1e40af; }
+    #chat {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      min-height: 150px;
+      max-height: 260px;
+      overflow: auto;
+      background: #fafcff;
+    }
+    .msg { margin: 0 0 12px; padding-bottom: 10px; border-bottom: 1px dashed #d9dfeb; }
+    .msg small { color: var(--muted); }
+    pre {
+      background: #0f172a;
+      color: #c7d2fe;
+      border-radius: 12px;
+      padding: 10px;
+      min-height: 64px;
+      overflow: auto;
+      font-size: 12px;
+    }
+    .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 18px; }
+    .kpi { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 14px; box-shadow: var(--shadow); }
+    .kpi h4 { margin: 0 0 8px; color: var(--muted); font-size: 13px; }
+    .kpi p { margin: 0; font-size: 24px; font-weight: 700; }
+    .kpi .delta { color: var(--success); font-size: 12px; margin-top: 6px; }
+    .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+    .chart-wrap { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 12px; box-shadow: var(--shadow); }
+    .chart-wrap h3 { margin: 4px 0 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--border); }
+    th { color: #334155; background: #f8fafc; }
+    @media (max-width: 900px){ .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class='container'>
+    <div class='hero'>
+      <h2>Secure AI Insights Assistant</h2>
+      <p>Ask questions, inspect tool traces, and monitor performance signals with richer visuals.</p>
+    </div>
+
+    <div class='panel'>
+      <div class='row'>
+        <input id='q' placeholder='Ask a business question'/>
+        <select id='year'><option>2025</option><option>2024</option></select>
+        <button onclick='ask()'>Ask</button>
+      </div>
+      <div id='chat'></div>
+    </div>
+
+    <div class='panel'>
+      <h3>Tool Trace</h3>
+      <pre id='trace'></pre>
+    </div>
+
+    <div class='kpis'>
+      <div class='kpi'><h4>Total Watch Minutes</h4><p id='kpiMinutes'>—</p><div class='delta'>Top-5 titles</div></div>
+      <div class='kpi'><h4>Avg. Rating</h4><p id='kpiRating'>—</p><div class='delta'>Across top titles</div></div>
+      <div class='kpi'><h4>Best Performing Title</h4><p id='kpiTopTitle'>—</p><div class='delta'>By watch minutes</div></div>
+      <div class='kpi'><h4>Top City Engagement</h4><p id='kpiTopCity'>—</p><div class='delta'>Last 30 days</div></div>
+    </div>
+
+    <div class='grid'>
+      <div class='chart-wrap'>
+        <h3>Top Titles by Watch Minutes</h3>
+        <canvas id='chartTitles' height='200'></canvas>
+      </div>
+      <div class='chart-wrap'>
+        <h3>City Engagement Mix</h3>
+        <canvas id='chartCities' height='200'></canvas>
+      </div>
+      <div class='chart-wrap'>
+        <h3>Title Ratings Overview</h3>
+        <canvas id='chartRatings' height='150'></canvas>
+      </div>
+      <div class='chart-wrap'>
+        <h3>Detailed Top Titles Table</h3>
+        <table>
+          <thead><tr><th>Title</th><th>Watch Minutes</th><th>Avg Rating</th></tr></thead>
+          <tbody id='titleTable'></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
 <script>
-async function ask(){const query=q.value;const year=document.getElementById('year').value;const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query,filters:{year}})});const data=await r.json();chat.innerHTML+=`<p><b>You:</b> ${query}</p><p><b>Assistant:</b> ${data.answer}</p><p><i>Sources: ${data.sources.map(s=>s.tool+':'+s.source).join(', ')}</i></p>`;trace.textContent=JSON.stringify(data.trace,null,2)}
-async function dash(){const r=await fetch('/api/dashboard');const d=await r.json();new Chart(document.getElementById('chart'),{type:'bar',data:{labels:d.top_titles.map(x=>x.title),datasets:[{label:'Watch Minutes',data:d.top_titles.map(x=>x.total_minutes)}]}})}
+let titleChart, cityChart, ratingChart;
+
+function fmt(num){return Number(num).toLocaleString();}
+
+async function ask(){
+  const query=q.value.trim();
+  if(!query) return;
+  const year=document.getElementById('year').value;
+  const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query,filters:{year}})});
+  const data=await r.json();
+  chat.innerHTML += `<div class='msg'><p><b>You:</b> ${query}</p><p><b>Assistant:</b> ${data.answer}</p><small>Sources: ${data.sources.map(s=>s.tool+':'+s.source).join(', ')}</small></div>`;
+  chat.scrollTop = chat.scrollHeight;
+  trace.textContent = JSON.stringify(data.trace, null, 2);
+  q.value = '';
+}
+
+function upsertChart(instance, canvasId, config){
+  if(instance) instance.destroy();
+  return new Chart(document.getElementById(canvasId), config);
+}
+
+async function dash(){
+  const r=await fetch('/api/dashboard');
+  const d=await r.json();
+
+  const titles = d.top_titles || [];
+  const cities = d.city_engagement || [];
+
+  const totalMinutes = titles.reduce((s,x)=>s + (x.total_minutes || 0),0);
+  const avgRating = titles.length ? titles.reduce((s,x)=>s + (x.avg_rating || 0),0)/titles.length : 0;
+
+  document.getElementById('kpiMinutes').textContent = fmt(totalMinutes);
+  document.getElementById('kpiRating').textContent = avgRating.toFixed(2);
+  document.getElementById('kpiTopTitle').textContent = titles[0]?.title || '—';
+  document.getElementById('kpiTopCity').textContent = cities[0]?.city || '—';
+
+  document.getElementById('titleTable').innerHTML = titles.map(x =>
+    `<tr><td>${x.title}</td><td>${fmt(x.total_minutes)}</td><td>${Number(x.avg_rating || 0).toFixed(2)}</td></tr>`
+  ).join('');
+
+  titleChart = upsertChart(titleChart, 'chartTitles', {
+    type:'bar',
+    data:{labels:titles.map(x=>x.title),datasets:[{label:'Watch Minutes',data:titles.map(x=>x.total_minutes),backgroundColor:'#60a5fa'}]},
+    options:{plugins:{legend:{display:true}},scales:{y:{beginAtZero:true}}}
+  });
+
+  cityChart = upsertChart(cityChart, 'chartCities', {
+    type:'doughnut',
+    data:{labels:cities.map(x=>x.city),datasets:[{label:'City Minutes',data:cities.map(x=>x.total_minutes),backgroundColor:['#2563eb','#0891b2','#7c3aed','#0ea5e9','#f59e0b','#16a34a','#ef4444','#64748b','#e11d48','#84cc16']} ]}
+  });
+
+  ratingChart = upsertChart(ratingChart, 'chartRatings', {
+    type:'line',
+    data:{labels:titles.map(x=>x.title),datasets:[{label:'Average Rating',data:titles.map(x=>Number(x.avg_rating||0).toFixed(2)),borderColor:'#1d4ed8',backgroundColor:'#bfdbfe',tension:.35,fill:true}]},
+    options:{scales:{y:{beginAtZero:true,suggestedMax:5}}}
+  });
+}
+
 dash();
-</script></body></html>
+</script>
+</body>
+</html>

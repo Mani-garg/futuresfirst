@@ -133,15 +133,25 @@
     .msg { margin: 0 0 10px; padding-bottom: 10px; border-bottom: 1px dashed #d6deea; }
     .msg:last-child { margin-bottom: 0; border-bottom: 0; }
 
-    pre {
-      background: #0f172a;
-      color: #dbeafe;
-      border-radius: var(--radius-sm);
-      padding: 12px;
-      min-height: 80px;
-      overflow: auto;
-      font-size: 12px;
-    }
+    .trace-timeline { display: grid; gap: 10px; min-height: 80px; }
+    .trace-step { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #f8fafc; }
+    .trace-step summary { list-style: none; cursor: pointer; padding: 11px 12px; display: grid; gap: 8px; }
+    .trace-step summary::-webkit-details-marker { display: none; }
+    .trace-topline { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .trace-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+    .trace-name { font-weight: 600; font-size: 14px; }
+    .badge { border-radius: 999px; padding: 2px 8px; font-size: 11px; font-weight: 600; border: 1px solid transparent; letter-spacing: .02em; }
+    .badge.status-success { color: #166534; background: rgba(22,163,74,.16); border-color: rgba(22,163,74,.34); }
+    .badge.status-running { color: #1d4ed8; background: rgba(37,99,235,.16); border-color: rgba(59,130,246,.34); }
+    .badge.status-failed { color: #991b1b; background: rgba(220,38,38,.12); border-color: rgba(248,113,113,.35); }
+    .badge.status-idle { color: #334155; background: rgba(148,163,184,.18); border-color: rgba(148,163,184,.35); }
+    .badge.cat-retrieval { color: #3730a3; background: rgba(99,102,241,.16); border-color: rgba(129,140,248,.35); }
+    .badge.cat-reasoning { color: #9d174d; background: rgba(190,24,93,.12); border-color: rgba(236,72,153,.32); }
+    .badge.cat-execution { color: #155e75; background: rgba(8,145,178,.14); border-color: rgba(6,182,212,.34); }
+    .badge.cat-observability { color: #854d0e; background: rgba(202,138,4,.14); border-color: rgba(250,204,21,.35); }
+    .trace-body { border-top: 1px dashed var(--border); padding: 10px 12px; font-size: 12px; color: #334155; display: grid; gap: 6px; }
+    .trace-source a { color: #1d4ed8; text-decoration: none; }
+    .trace-source a:hover { text-decoration: underline; }
 
     .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0; }
     .kpi {
@@ -228,8 +238,8 @@
           </div>
 
           <div class='panel'>
-            <h3>Tool Trace</h3>
-            <pre id='trace'></pre>
+            <h3>Execution Timeline</h3>
+            <div id='trace' class='trace-timeline'></div>
           </div>
 
           <div class='kpis'>
@@ -285,6 +295,57 @@ let titleChart, cityChart, ratingChart;
 const queryHistory = [];
 
 function fmt(num){return Number(num).toLocaleString();}
+function esc(v){return String(v ?? '').replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));}
+function fmtTs(ts){
+  const d = new Date(ts || Date.now());
+  return Number.isNaN(d.getTime()) ? '—' : d.toLocaleTimeString([], { hour12:false });
+}
+function statusStyle(status){
+  const s = (status || 'idle').toLowerCase();
+  if (s.includes('success') || s.includes('complete') || s.includes('ok')) return { icon:'✅', cls:'status-success', label:'Success' };
+  if (s.includes('fail') || s.includes('error')) return { icon:'❌', cls:'status-failed', label:'Failed' };
+  if (s.includes('run') || s.includes('progress')) return { icon:'🟦', cls:'status-running', label:'Running' };
+  return { icon:'⏺️', cls:'status-idle', label:'Idle' };
+}
+function categoryStyle(tool){
+  const t = (tool || '').toLowerCase();
+  if (/(search|retriev|db|query)/.test(t)) return { cls:'cat-retrieval', label:'Retrieval' };
+  if (/(reason|llm|plan|chat)/.test(t)) return { cls:'cat-reasoning', label:'Reasoning' };
+  if (/(exec|call|write|apply|commit)/.test(t)) return { cls:'cat-execution', label:'Execution' };
+  return { cls:'cat-observability', label:'Observability' };
+}
+function renderTrace(traceData, sources){
+  const steps = Array.isArray(traceData) ? traceData : (traceData?.steps || []);
+  if (!steps.length){
+    trace.innerHTML = `<ul class='list'><li>No execution steps yet. Run a query to inspect tool activity.</li></ul>`;
+    return;
+  }
+  trace.innerHTML = steps.map((step, i) => {
+    const st = statusStyle(step.status);
+    const cat = categoryStyle(step.tool || step.name);
+    const toolName = step.tool || step.name || `Step ${i + 1}`;
+    const source = step.source || sources?.[i]?.source;
+    const attr = step.attribution || sources?.[i]?.tool || 'internal';
+    return `<details class='trace-step' ${i===0?'open':''}>
+      <summary>
+        <div class='trace-topline'>
+          <div class='trace-name'>${st.icon} ${esc(toolName)}</div>
+          <span class='badge ${st.cls}'>${st.label}</span>
+        </div>
+        <div class='trace-meta'>
+          <span>⏱ ${fmtTs(step.timestamp || step.ts || step.time)}</span>
+          <span class='badge ${cat.cls}'>${cat.label}</span>
+          <span>Step ${i + 1}</span>
+        </div>
+      </summary>
+      <div class='trace-body'>
+        <div><b>Input:</b> ${esc(JSON.stringify(step.input ?? step.args ?? {}))}</div>
+        <div><b>Output:</b> ${esc(JSON.stringify(step.output ?? step.result ?? step.message ?? 'N/A'))}</div>
+        <div class='trace-source'><b>Source Attribution:</b> ${source ? `<a href='${esc(source)}' target='_blank' rel='noopener noreferrer'>${esc(attr)} · ${esc(source)}</a>` : esc(attr)}</div>
+      </div>
+    </details>`;
+  }).join('');
+}
 
 async function ask(){
   const query=q.value.trim();
@@ -294,7 +355,7 @@ async function ask(){
   const data=await r.json();
   chat.innerHTML += `<div class='msg'><p><b>You:</b> ${query}</p><p><b>Assistant:</b> ${data.answer}</p><small>Sources: ${data.sources.map(s=>s.tool+':'+s.source).join(', ')}</small></div>`;
   chat.scrollTop = chat.scrollHeight;
-  trace.textContent = JSON.stringify(data.trace, null, 2);
+  renderTrace(data.trace, data.sources);
 
   queryHistory.unshift(`${query} (${year})`);
   document.getElementById('queryHistory').innerHTML = queryHistory.slice(0,8).map(item => `<li>${item}</li>`).join('');

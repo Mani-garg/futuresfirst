@@ -187,6 +187,7 @@
     .chart-subtitle { margin: 2px 0 0; font-size: 12px; color: var(--muted); }
     .chart-pill { font-size: 11px; color:#1e40af; background:#dbeafe; border:1px solid #bfdbfe; border-radius: 999px; padding: 4px 10px; font-weight: 600; white-space: nowrap; display: inline-flex; align-items: center; line-height: 1; }
     .chart-canvas-wrap { position: relative; height: 230px; }
+    .chart-canvas-wrap.city-donut { height: 250px; }
     .chart-wrap.span-6 { grid-column: span 6; }
     .chart-wrap.span-8 { grid-column: span 8; }
     .chart-wrap.span-4 { grid-column: span 4; }
@@ -314,7 +315,7 @@
                 </div>
                 <span class='chart-pill'>30 Days</span>
               </div>
-              <div class='chart-canvas-wrap'><canvas id='chartCities'></canvas></div>
+              <div class='chart-canvas-wrap city-donut'><canvas id='chartCities'></canvas></div>
             </div>
             <div class='chart-wrap span-6'>
               <div class='chart-head'>
@@ -583,8 +584,9 @@ async function dash(){
       responsive:true,
       maintainAspectRatio:false,
       cutout:'62%',
+      layout:{padding:{top:6,right:6,left:6,bottom:0}},
       plugins:{
-        legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:8,padding:14,color:'#334155',font:chartTypography}},
+        legend:{position:'bottom',align:'center',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,padding:10,color:'#334155',font:chartTypography}},
         tooltip:{
           ...chartTooltip,
           callbacks:{
